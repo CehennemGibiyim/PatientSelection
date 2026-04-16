@@ -12,894 +12,1604 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg:#060a08;--bg2:#0c1410;--bg-card:#101a14;--bg-hover:#152019;--bg-input:#0a120e;
-            --border:#1a2e22;--border-lt:#243a2c;--border-focus:#00e676;
-            --text:#dff0e5;--text2:#a3c4b0;--text-m:#506e5c;
-            --accent:#00e676;--accent-d:#00c853;--accent-g:rgba(0,230,118,0.15);--accent-gs:rgba(0,230,118,0.3);
-            --warn:#ff9100;--warn-g:rgba(255,145,0,0.15);
-            --danger:#ff1744;--danger-g:rgba(255,23,68,0.15);
-            --info:#00b0ff;--info-g:rgba(0,176,255,0.15);
+            --bg: #060a08;
+            --bg-elevated: #0c1410;
+            --bg-card: #101a14;
+            --bg-card-hover: #152019;
+            --bg-input: #0a120e;
+            --border: #1a2e22;
+            --border-light: #243a2c;
+            --border-focus: #00e676;
+            --text: #dff0e5;
+            --text-secondary: #a3c4b0;
+            --text-muted: #506e5c;
+            --accent: #00e676;
+            --accent-dim: #00c853;
+            --accent-glow: rgba(0,230,118,0.15);
+            --accent-glow-strong: rgba(0,230,118,0.3);
+            --warning: #ff9100;
+            --warning-glow: rgba(255,145,0,0.15);
+            --danger: #ff1744;
+            --danger-glow: rgba(255,23,68,0.15);
+            --info: #00b0ff;
+            --info-glow: rgba(0,176,255,0.15);
         }
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-        body::before{content:'';position:fixed;top:-30%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(0,230,118,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
-        body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,176,255,0.03) 0%,transparent 70%);pointer-events:none;z-index:0}
-        h1,h2,h3,h4,h5,h6,.fd{font-family:'Space Grotesk',sans-serif}
-        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;transition:border-color .3s,box-shadow .3s}
-        .card:hover{border-color:var(--border-lt)}
-        .ipt{background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;width:100%;transition:border-color .25s,box-shadow .25s;outline:none}
-        .ipt:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--accent-g)}
-        .ipt::placeholder{color:var(--text-m)}
-        .ipt.af{border-color:var(--accent-d);background:rgba(0,230,118,0.04)}
-        .sel{background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;width:100%;transition:border-color .25s,box-shadow .25s;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23506e5c' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-        .sel:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--accent-g)}
-        .sel.af{border-color:var(--accent-d);background-color:rgba(0,230,118,0.04);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300c853' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E")}
-        .sel option{background:var(--bg-card);color:var(--text)}
-        .fl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
-        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:all .25s;outline:none;white-space:nowrap}
-        .btn:active{transform:scale(.97)}
-        .btn-p{background:var(--accent);color:#060a08;box-shadow:0 0 20px var(--accent-g)}
-        .btn-p:hover{background:#33eb91;box-shadow:0 0 30px var(--accent-gs)}
-        .btn-s{background:transparent;color:var(--accent);border-color:var(--border-lt)}
-        .btn-s:hover{background:var(--accent-g);border-color:var(--accent-d)}
-        .btn-w{background:var(--warn);color:#060a08}
-        .btn-w:hover{background:#ffa733;box-shadow:0 0 20px var(--warn-g)}
-        .btn-d{background:transparent;color:var(--danger);border-color:rgba(255,23,68,.3)}
-        .btn-d:hover{background:var(--danger-g);border-color:var(--danger)}
-        .btn-g{background:var(--bg-card);color:var(--text2);border-color:var(--border)}
-        .btn-g:hover{background:var(--bg-hover);color:var(--text);border-color:var(--border-lt)}
-        .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
-        .upz{border:2px dashed var(--border-lt);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;background:var(--bg-input);position:relative;overflow:hidden}
-        .upz:hover,.upz.dov{border-color:var(--accent-d);background:var(--accent-g)}
-        .upz input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
-        .st-i{display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative}
-        .st-i:not(:last-child)::after{content:'';position:absolute;left:15px;top:38px;bottom:-2px;width:2px;background:var(--border)}
-        .st-i.done:not(:last-child)::after{background:var(--accent-d)}
-        .st-c{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:2px solid var(--border);background:var(--bg-input);color:var(--text-m);transition:all .3s}
-        .st-i.done .st-c{background:var(--accent);border-color:var(--accent);color:#060a08}
-        .st-i.act .st-c{border-color:var(--accent-d);color:var(--accent);box-shadow:0 0 12px var(--accent-g);animation:sp 2s ease-in-out infinite}
-        @keyframes sp{0%,100%{box-shadow:0 0 12px var(--accent-g)}50%{box-shadow:0 0 20px var(--accent-gs)}}
-        .st-t{font-size:13px;color:var(--text-m);line-height:1.4;padding-top:5px}
-        .st-i.done .st-t{color:var(--text2)}
-        .st-i.act .st-t{color:var(--text);font-weight:500}
-        .tc{position:fixed;top:20px;right:20px;z-index:10000;display:flex;flex-direction:column;gap:10px}
-        .toast{padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;min-width:300px;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.4);animation:ti .4s cubic-bezier(.16,1,.3,1);border:1px solid}
-        .toast.suc{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3);color:var(--accent)}
-        .toast.err{background:rgba(255,23,68,.1);border-color:rgba(255,23,68,.3);color:var(--danger)}
-        .toast.wrn{background:rgba(255,145,0,.1);border-color:rgba(255,145,0,.3);color:var(--warn)}
-        .toast.inf{background:rgba(0,176,255,.1);border-color:rgba(0,176,255,.3);color:var(--info)}
-        .toast.rm{animation:to .3s cubic-bezier(.16,1,.3,1) forwards}
-        @keyframes ti{from{opacity:0;transform:translateX(60px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
-        @keyframes to{to{opacity:0;transform:translateX(60px) scale(.95)}}
-        .mo{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:9000;display:flex;align-items:center;justify-content:center;animation:fi .3s}
-        .mc{background:var(--bg-card);border:1px solid var(--border-lt);border-radius:16px;padding:32px;max-width:520px;width:90%;animation:mi .4s cubic-bezier(.16,1,.3,1)}
-        @keyframes fi{from{opacity:0}to{opacity:1}}
-        @keyframes mi{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-        .pb-t{width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-        .pb-f{height:100%;background:linear-gradient(90deg,var(--accent-d),var(--accent));border-radius:3px;transition:width .3s;box-shadow:0 0 8px var(--accent-g)}
-        @keyframes af{0%{box-shadow:0 0 0 3px var(--accent-gs)}50%{box-shadow:0 0 0 6px var(--accent-g)}100%{box-shadow:0 0 0 3px var(--accent-g)}}
-        .aff{animation:af .6s ease}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border-lt);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--text-m)}
-        .sec-t{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-        .sec-t::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border-lt),transparent)}
-        .sec-t i{color:var(--accent);font-size:14px}
-        .sec-t span{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--text);letter-spacing:.03em}
-        .sb{background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:12px 16px;text-align:center}
-        .sv{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--accent)}
-        .sl{font-size:11px;color:var(--text-m);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
-        .pi{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;background:var(--bg-input);border:1px solid var(--border);transition:all .2s;cursor:pointer}
-        .pi:hover{border-color:var(--border-lt);background:var(--bg-hover)}
-        .pi .db{opacity:0;transition:opacity .2s;color:var(--danger);cursor:pointer;padding:4px}
-        .pi:hover .db{opacity:1}
-        .tabs{display:flex;gap:4px;background:var(--bg-input);border-radius:10px;padding:4px;border:1px solid var(--border)}
-        .tab{flex:1;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;transition:all .25s;color:var(--text-m);border:none;background:transparent;font-family:'DM Sans',sans-serif}
-        .tab:hover{color:var(--text2)}
-        .tab.act{background:var(--bg-card);color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.2)}
-        .tabp{display:none}.tabp.act{display:block}
-        .ocr-ta{background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;width:100%;min-height:140px;max-height:260px;resize:vertical;outline:none;line-height:1.6;transition:border-color .25s}
-        .ocr-ta:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--accent-g)}
-        .warn-box{background:rgba(255,145,0,.06);border:1px solid rgba(255,145,0,.25);border-radius:10px;padding:16px;display:flex;align-items:flex-start;gap:12px}
-        .warn-box i{color:var(--warn);font-size:20px;margin-top:2px;flex-shrink:0}
-        @media(max-width:1024px){.mg{grid-template-columns:1fr!important}}
-        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Arka plan atmosferi */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -30%;
+            left: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(0,230,118,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(0,176,255,0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Kart stili */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            border-color: var(--border-light);
+        }
+
+        /* Input stili */
+        .input-field {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            width: 100%;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+        .input-field:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+        .input-field.auto-filled {
+            border-color: var(--accent-dim);
+            background: rgba(0,230,118,0.04);
+        }
+
+        /* Select stili */
+        .select-field {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            width: 100%;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23506e5c' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        .select-field:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .select-field.auto-filled {
+            border-color: var(--accent-dim);
+            background-color: rgba(0,230,118,0.04);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300c853' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        }
+        .select-field option {
+            background: var(--bg-card);
+            color: var(--text);
+        }
+
+        /* Label stili */
+        .field-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* Buton stili */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.25s;
+            outline: none;
+            white-space: nowrap;
+        }
+        .btn:active { transform: scale(0.97); }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #060a08;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            background: #33eb91;
+            box-shadow: 0 0 30px var(--accent-glow-strong);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--border-light);
+        }
+        .btn-secondary:hover {
+            background: var(--accent-glow);
+            border-color: var(--accent-dim);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #060a08;
+        }
+        .btn-warning:hover {
+            background: #ffa733;
+            box-shadow: 0 0 20px var(--warning-glow);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border-color: rgba(255,23,68,0.3);
+        }
+        .btn-danger:hover {
+            background: var(--danger-glow);
+            border-color: var(--danger);
+        }
+
+        .btn-ghost {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+        .btn-ghost:hover {
+            background: var(--bg-card-hover);
+            color: var(--text);
+            border-color: var(--border-light);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Dosya yükleme alanı */
+        .upload-zone {
+            border: 2px dashed var(--border-light);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-input);
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--accent-dim);
+            background: var(--accent-glow);
+        }
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Durum adımları */
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            position: relative;
+        }
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 38px;
+            bottom: -2px;
+            width: 2px;
+            background: var(--border);
+        }
+        .step-item.completed:not(:last-child)::after {
+            background: var(--accent-dim);
+        }
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            border: 2px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+        .step-item.completed .step-icon {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #060a08;
+        }
+        .step-item.active .step-icon {
+            border-color: var(--accent-dim);
+            color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+            animation: stepPulse 2s ease-in-out infinite;
+        }
+        @keyframes stepPulse {
+            0%, 100% { box-shadow: 0 0 12px var(--accent-glow); }
+            50% { box-shadow: 0 0 20px var(--accent-glow-strong); }
+        }
+        .step-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            padding-top: 5px;
+        }
+        .step-item.completed .step-text { color: var(--text-secondary); }
+        .step-item.active .step-text { color: var(--text); font-weight: 500; }
+
+        /* Hasta listesi öğesi */
+        .patient-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .patient-item:hover {
+            border-color: var(--border-light);
+            background: var(--bg-card-hover);
+        }
+        .patient-item .delete-btn {
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 4px;
+        }
+        .patient-item:hover .delete-btn { opacity: 1; }
+
+        /* Toast bildirimi */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+            max-width: 450px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            animation: toastIn 0.4s cubic-bezier(0.16,1,0.3,1);
+            border: 1px solid;
+        }
+        .toast.success {
+            background: rgba(0,230,118,0.1);
+            border-color: rgba(0,230,118,0.3);
+            color: var(--accent);
+        }
+        .toast.error {
+            background: rgba(255,23,68,0.1);
+            border-color: rgba(255,23,68,0.3);
+            color: var(--danger);
+        }
+        .toast.warning {
+            background: rgba(255,145,0,0.1);
+            border-color: rgba(255,145,0,0.3);
+            color: var(--warning);
+        }
+        .toast.info {
+            background: rgba(0,176,255,0.1);
+            border-color: rgba(0,176,255,0.3);
+            color: var(--info);
+        }
+        .toast.removing {
+            animation: toastOut 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(60px) scale(0.95); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toastOut {
+            to { opacity: 0; transform: translateX(60px) scale(0.95); }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            animation: modalIn 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* İlerleme çubuğu */
+        .progress-bar-track {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+            border-radius: 3px;
+            transition: width 0.3s;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        /* Otomatik doldurma animasyonu */
+        @keyframes autoFillFlash {
+            0% { box-shadow: 0 0 0 3px var(--accent-glow-strong); }
+            50% { box-shadow: 0 0 0 6px var(--accent-glow); }
+            100% { box-shadow: 0 0 0 3px var(--accent-glow); }
+        }
+        .auto-fill-flash {
+            animation: autoFillFlash 0.6s ease;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Boş durum */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        .badge-positive {
+            background: var(--danger-glow);
+            color: var(--danger);
+            border: 1px solid rgba(255,23,68,0.3);
+        }
+        .badge-negative {
+            background: rgba(0,230,118,0.1);
+            color: var(--accent);
+            border: 1px solid rgba(0,230,118,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Section başlık çizgisi */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border-light), transparent);
+        }
+        .section-title i {
+            color: var(--accent);
+            font-size: 14px;
+        }
+        .section-title span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.03em;
+        }
+
+        /* Stat kutusu */
+        .stat-box {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
-    <div class="tc" id="tc"></div>
-
-    <!-- Uyarı Modal -->
-    <div class="mo" id="warnModal" style="display:none">
-        <div class="mc">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-                <div style="width:44px;height:44px;border-radius:50%;background:var(--warn-g);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="fa-solid fa-triangle-exclamation" style="font-size:20px;color:var(--warn)"></i>
-                </div>
-                <div>
-                    <h3 class="fd" style="font-size:17px;font-weight:700">Hasta Eşleştirme Uyarısı</h3>
-                    <p style="font-size:12px;color:var(--text-m);margin-top:2px">Rapor ile form bilgisi uyuşmuyor</p>
-                </div>
-            </div>
-            <div class="warn-box" style="margin-bottom:20px">
-                <i class="fa-solid fa-circle-info"></i>
-                <div>
-                    <p style="font-size:14px;color:var(--text);line-height:1.6" id="warnText"></p>
-                </div>
-            </div>
-            <div style="display:flex;gap:10px;justify-content:flex-end">
-                <button class="btn btn-g" onclick="closeWarnModal()"><i class="fa-solid fa-xmark"></i> Vazgeç</button>
-                <button class="btn btn-w" onclick="confirmMismatch()"><i class="fa-solid fa-check"></i> Yine de Devam Et</button>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <!-- OCR Modal -->
-    <div class="mo" id="ocrMo" style="display:none">
-        <div class="mc">
-            <div style="text-align:center;margin-bottom:20px">
-                <i class="fa-solid fa-magnifying-glass-chart" style="font-size:32px;color:var(--accent);margin-bottom:12px;display:block"></i>
-                <h3 class="fd" style="font-size:18px;font-weight:600" id="ocrMoT">OCR İşlemi</h3>
-                <p style="font-size:13px;color:var(--text-m);margin-top:6px" id="ocrMoD">Dosya analiz ediliyor...</p>
+    <div class="modal-overlay" id="ocrModal" style="display:none;">
+        <div class="modal-content">
+            <div style="text-align:center; margin-bottom:20px;">
+                <i class="fa-solid fa-magnifying-glass-chart" style="font-size:32px; color:var(--accent); margin-bottom:12px; display:block;"></i>
+                <h3 class="font-display" style="font-size:18px; font-weight:600;" id="ocrModalTitle">OCR Islemi Basladi</h3>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:6px;" id="ocrModalDesc">Gorsel analiz ediliyor...</p>
             </div>
-            <div class="pb-t" style="margin-bottom:12px"><div class="pb-f" id="ocrPb" style="width:0%"></div></div>
-            <p style="font-size:12px;color:var(--text-m);text-align:center" id="ocrSt">Hazırlanıyor...</p>
+            <div class="progress-bar-track" style="margin-bottom:12px;">
+                <div class="progress-bar-fill" id="ocrProgress" style="width:0%"></div>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); text-align:center;" id="ocrStatusText">Hazirlaniyor...</p>
         </div>
     </div>
 
-    <div style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column">
+    <!-- Ana Yapı -->
+    <div style="position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column;">
 
         <!-- Header -->
-        <header style="border-bottom:1px solid var(--border);padding:16px 24px;background:var(--bg2)">
-            <div style="max-width:1480px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-                <div style="display:flex;align-items:center;gap:14px">
-                    <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent-d),var(--accent));display:flex;align-items:center;justify-content:center">
-                        <i class="fa-solid fa-hospital" style="font-size:18px;color:#060a08"></i>
+        <header style="border-bottom:1px solid var(--border); padding:16px 24px; background:var(--bg-elevated);">
+            <div style="max-width:1440px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, var(--accent-dim), var(--accent)); display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-hospital" style="font-size:18px; color:#060a08;"></i>
                     </div>
                     <div>
-                        <h1 class="fd" style="font-size:20px;font-weight:700;letter-spacing:-.02em">HBYS Veri Toplama Paneli</h1>
-                        <p style="font-size:11px;color:var(--text-m);margin-top:1px">Hastane Bilgi Yönetim Sistemi — OCR Destekli Veri Toplama</p>
+                        <h1 class="font-display" style="font-size:20px; font-weight:700; letter-spacing:-0.02em;">HBYS Veri Toplama Paneli</h1>
+                        <p style="font-size:11px; color:var(--text-muted); margin-top:1px;">Hastane Bilgi Yonetim Sistemi — Veri Toplama Araci</p>
                     </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:12px">
-                    <div class="sb" style="padding:8px 14px">
-                        <span class="sv" style="font-size:18px" id="hc">0</span>
-                        <span class="sl" style="font-size:10px">Kayıtlı Hasta</span>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="stat-box" style="padding:8px 14px;">
+                        <span class="stat-value" style="font-size:18px;" id="headerCount">0</span>
+                        <span class="stat-label" style="font-size:10px;">Kayitli Hasta</span>
+                    </div>
+                    <div class="badge badge-negative" style="font-size:12px; padding:6px 12px;">
+                        <i class="fa-solid fa-circle" style="font-size:6px; margin-right:4px;"></i> Aktif
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Ana İçerik -->
-        <main style="flex:1;padding:24px;max-width:1480px;margin:0 auto;width:100%">
-            <div class="mg" style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
+        <main style="flex:1; padding:24px; max-width:1440px; margin:0 auto; width:100%;">
+            <div class="main-grid" style="display:grid; grid-template-columns:1fr 380px; gap:24px; align-items:start;">
 
-                <!-- Sol -->
-                <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Sol Sütun -->
+                <div style="display:flex; flex-direction:column; gap:20px;">
 
-                    <!-- Dosya Okuma Merkezi -->
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t">
-                            <i class="fa-solid fa-file-import"></i>
-                            <span>Dosya Okuma Merkezi</span>
+                    <!-- Dosya Yükleme Kartı -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Otomatik Veri Yukleme</span>
                         </div>
-                        <!-- Sekmeler -->
-                        <div class="tabs" style="margin-bottom:16px">
-                            <button class="tab act" data-tab="t1" onclick="switchTab('t1',this)"><i class="fa-solid fa-id-card" style="margin-right:6px"></i>Hasta Bilgisi</button>
-                            <button class="tab" data-tab="t2" onclick="switchTab('t2',this)"><i class="fa-solid fa-file-medical" style="margin-right:6px"></i>Rapor</button>
-                            <button class="tab" data-tab="t3" onclick="switchTab('t3',this)"><i class="fa-solid fa-flask" style="margin-right:6px"></i>Laboratuvar</button>
-                        </div>
-
-                        <!-- Tab 1: Hasta Bilgisi -->
-                        <div class="tabp act" id="tp-t1">
-                            <div class="upz" id="uz1">
-                                <input type="file" accept="image/*" id="fi1" aria-label="Hasta bilgi goruntusu yukle">
-                                <i class="fa-solid fa-id-card" style="font-size:28px;color:var(--text-m);margin-bottom:8px;display:block"></i>
-                                <p style="font-size:14px;font-weight:600;color:var(--text2)">Hasta Bilgi Ekran Görüntüsü Yükle</p>
-                                <p style="font-size:12px;color:var(--text-m);margin-top:4px">PNG, JPG — HBYS kişi bilgisi ekranı</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                            <!-- Hasta Bilgi Ekran Görüntüsü -->
+                            <div class="upload-zone" id="patientUploadZone">
+                                <input type="file" accept="image/*" id="patientImageInput" aria-label="Hasta bilgi ekran goruntusu yukle">
+                                <i class="fa-solid fa-id-card" style="font-size:24px; color:var(--text-muted); margin-bottom:8px; display:block;"></i>
+                                <p style="font-size:13px; font-weight:600; color:var(--text-secondary);">Hasta Bilgi Goruntusu</p>
+                                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">PNG, JPG — OCR ile otomatik doldurur</p>
                             </div>
-                            <div style="margin-top:14px">
-                                <label class="fl"><i class="fa-solid fa-eye" style="margin-right:4px"></i>OCR Okuma Sonucu (düzenleyebilirsiniz)</label>
-                                <textarea class="ocr-ta" id="ocr1" placeholder="Dosya yüklendikten sonra metin burada görünecek..."></textarea>
-                            </div>
-                            <div style="display:flex;gap:10px;margin-top:12px">
-                                <button class="btn btn-p" style="flex:1" onclick="processOcrText('patient')"><i class="fa-solid fa-wand-magic-sparkles"></i> Okunan Metni İşle ve Doldur</button>
-                                <button class="btn btn-g" onclick="pasteClip('patient')" title="Panodan metin yapıştır"><i class="fa-solid fa-paste"></i></button>
+                            <!-- Rapor Dosyası -->
+                            <div class="upload-zone" id="reportUploadZone">
+                                <input type="file" accept="image/*,.pdf" id="reportFileInput" aria-label="Rapor dosyasi yukle">
+                                <i class="fa-solid fa-file-medical" style="font-size:24px; color:var(--text-muted); margin-bottom:8px; display:block;"></i>
+                                <p style="font-size:13px; font-weight:600; color:var(--text-secondary);">Rapor Dosyasi</p>
+                                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">PDF, PNG, JPG — Bulgulari okur</p>
                             </div>
                         </div>
-
-                        <!-- Tab 2: Rapor -->
-                        <div class="tabp" id="tp-t2">
-                            <div class="upz" id="uz2">
-                                <input type="file" accept="image/*,.pdf" id="fi2" aria-label="Rapor dosyasi yukle">
-                                <i class="fa-solid fa-file-medical" style="font-size:28px;color:var(--text-m);margin-bottom:8px;display:block"></i>
-                                <p style="font-size:14px;font-weight:600;color:var(--text2)">Rapor Dosyası Yükle</p>
-                                <p style="font-size:12px;color:var(--text-m);margin-top:4px">PDF, PNG, JPG — Ultrason, radyoloji vb.</p>
-                            </div>
-                            <div style="margin-top:14px">
-                                <label class="fl"><i class="fa-solid fa-eye" style="margin-right:4px"></i>OCR Okuma Sonucu (düzenleyebilirsiniz)</label>
-                                <textarea class="ocr-ta" id="ocr2" placeholder="Rapor yüklendikten sonra metin burada görünecek..."></textarea>
-                            </div>
-                            <div style="display:flex;gap:10px;margin-top:12px">
-                                <button class="btn btn-p" style="flex:1" onclick="processOcrText('report')"><i class="fa-solid fa-wand-magic-sparkles"></i> Okunan Metni İşle ve Doldur</button>
-                                <button class="btn btn-g" onclick="pasteClip('report')" title="Panodan metin yapıştır"><i class="fa-solid fa-paste"></i></button>
-                            </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+                            <button class="btn btn-ghost" onclick="pasteFromClipboard('patient')" title="Panodan hasta bilgisi metni yapistirir">
+                                <i class="fa-solid fa-paste"></i> Panodan Hasta Bilgisi Al
+                            </button>
+                            <button class="btn btn-ghost" onclick="pasteFromClipboard('report')" title="Panodan radyoloji raporu metni yapistirir">
+                                <i class="fa-solid fa-paste"></i> Panodan Radyoloji Al
+                            </button>
                         </div>
+                    </div>
 
-                        <!-- Tab 3: Laboratuvar -->
-                        <div class="tabp" id="tp-t3">
-                            <div class="upz" id="uz3">
-                                <input type="file" accept="image/*,.pdf" id="fi3" aria-label="Lab sonuclari yukle">
-                                <i class="fa-solid fa-flask" style="font-size:28px;color:var(--text-m);margin-bottom:8px;display:block"></i>
-                                <p style="font-size:14px;font-weight:600;color:var(--text2)">Laboratuvar Sonuçları Yükle</p>
-                                <p style="font-size:12px;color:var(--text-m);margin-top:4px">PDF, PNG, JPG — Lab raporları</p>
+                    <!-- Hasta Bilgileri Kartı -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-user-pen"></i>
+                            <span>Hasta Bilgileri</span>
+                        </div>
+                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+                            <div>
+                                <label class="field-label" for="hastaId">Hasta ID</label>
+                                <input type="text" class="input-field" id="hastaId" placeholder="Otomatik">
                             </div>
-                            <div style="margin-top:14px">
-                                <label class="fl"><i class="fa-solid fa-eye" style="margin-right:4px"></i>OCR Okuma Sonucu (düzenleyebilirsiniz)</label>
-                                <textarea class="ocr-ta" id="ocr3" placeholder="Lab dosyası yüklendikten sonra metin burada görünecek..."></textarea>
+                            <div>
+                                <label class="field-label" for="tcKimlik">TC Kimlik</label>
+                                <input type="text" class="input-field" id="tcKimlik" placeholder="11 haneli TC" maxlength="11">
                             </div>
-                            <div style="display:flex;gap:10px;margin-top:12px">
-                                <button class="btn btn-p" style="flex:1" onclick="processOcrText('lab')"><i class="fa-solid fa-wand-magic-sparkles"></i> Okunan Metni İşle ve Doldur</button>
-                                <button class="btn btn-g" onclick="pasteClip('lab')" title="Panodan metin yapıştır"><i class="fa-solid fa-paste"></i></button>
+                            <div>
+                                <label class="field-label" for="adSoyad">Ad Soyad</label>
+                                <input type="text" class="input-field" id="adSoyad" placeholder="Ad ve Soyad">
+                            </div>
+                            <div>
+                                <label class="field-label" for="yas">Yas</label>
+                                <input type="number" class="input-field" id="yas" placeholder="Yas" min="0" max="150">
+                            </div>
+                            <div>
+                                <label class="field-label" for="cinsiyet">Cinsiyet</label>
+                                <select class="select-field" id="cinsiyet">
+                                    <option value="">Seciniz</option>
+                                    <option value="Erkek">Erkek</option>
+                                    <option value="Kadin">Kadin</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label" for="babaAdi">Baba Adi</label>
+                                <input type="text" class="input-field" id="babaAdi" placeholder="Baba Adi">
+                            </div>
+                            <div>
+                                <label class="field-label" for="dogumTarihi">Dogum Tarihi</label>
+                                <input type="text" class="input-field" id="dogumTarihi" placeholder="GG/AA/YYYY">
+                            </div>
+                            <div>
+                                <label class="field-label" for="sgkNo">SGK No</label>
+                                <input type="text" class="input-field" id="sgkNo" placeholder="Sosyal Guvenlik No">
+                            </div>
+                            <div>
+                                <label class="field-label" for="kayitTarihi">Kayit Tarihi</label>
+                                <input type="date" class="input-field" id="kayitTarihi">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Hasta Bilgileri -->
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t"><i class="fa-solid fa-user-pen"></i><span>Hasta Bilgileri</span></div>
-                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-                            <div><label class="fl" for="tc">TC Kimlik</label><input type="text" class="ipt" id="tc" placeholder="11 haneli TC" maxlength="11"></div>
-                            <div style="grid-column:span 2"><label class="fl" for="ad">Ad Soyad</label><input type="text" class="ipt" id="ad" placeholder="Ad ve Soyad"></div>
-                            <div><label class="fl" for="yas">Yaş</label><input type="number" class="ipt" id="yas" placeholder="Yaş" min="0" max="150"></div>
-                            <div><label class="fl" for="cin">Cinsiyet</label>
-                                <select class="sel" id="cin"><option value="">Seçiniz</option><option value="Erkek">Erkek</option><option value="Kadın">Kadın</option></select>
+                    <!-- İşlemler Kartı -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-stethoscope"></i>
+                            <span>Islemler — DVT Sonuclari</span>
+                        </div>
+                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+                            <div>
+                                <label class="field-label" for="dvtSonucu">DVT Sonucu</label>
+                                <select class="select-field" id="dvtSonucu">
+                                    <option value="">Seciniz</option>
+                                    <option value="Pozitif">Pozitif</option>
+                                    <option value="Negatif">Negatif</option>
+                                </select>
                             </div>
-                            <div><label class="fl" for="baba">Baba Adı</label><input type="text" class="ipt" id="baba" placeholder="Baba Adı"></div>
-                            <div><label class="fl" for="dtar">Doğum Tarihi</label><input type="text" class="ipt" id="dtar" placeholder="GG/AA/YYYY"></div>
-                            <div><label class="fl" for="sgk">SGK No</label><input type="text" class="ipt" id="sgk" placeholder="Sosyal Güvenlik No"></div>
-                            <div style="grid-column:span 2"><label class="fl" for="ktar">Kayıt Tarihi</label><input type="date" class="ipt" id="ktar"></div>
+                            <div>
+                                <label class="field-label" for="lokalizasyon">Lokalizasyon</label>
+                                <select class="select-field" id="lokalizasyon">
+                                    <option value="">Seciniz</option>
+                                    <option value="Proksimal">Proksimal</option>
+                                    <option value="Distal">Distal</option>
+                                    <option value="Proksimal + Distal">Proksimal + Distal</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label" for="taraf">Taraf</label>
+                                <select class="select-field" id="taraf">
+                                    <option value="">Seciniz</option>
+                                    <option value="Sol">Sol</option>
+                                    <option value="Sag">Sag</option>
+                                    <option value="Bilateral">Bilateral</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- DVT + Rapor Bulguları -->
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t"><i class="fa-solid fa-stethoscope"></i><span>İşlem Sonuçları</span></div>
-                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
-                            <div><label class="fl" for="dvt">DVT Sonucu</label>
-                                <select class="sel" id="dvt"><option value="">Seçiniz</option><option value="Pozitif">Pozitif</option><option value="Negatif">Negatif</option></select>
-                            </div>
-                            <div><label class="fl" for="lok">Lokalizasyon</label>
-                                <select class="sel" id="lok"><option value="">Seçiniz</option><option value="Proksimal">Proksimal</option><option value="Distal">Distal</option><option value="Proksimal + Distal">Proksimal + Distal</option></select>
-                            </div>
-                            <div><label class="fl" for="tar">Taraf</label>
-                                <select class="sel" id="tar"><option value="">Seçiniz</option><option value="Sol">Sol</option><option value="Sağ">Sağ</option><option value="Bilateral">Bilateral</option></select>
-                            </div>
+                    <!-- Laboratuvar Sonuçları Kartı -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-flask-vial"></i>
+                            <span>Laboratuvar Sonuclari</span>
                         </div>
-                        <div>
-                            <label class="fl" for="bulgu"><i class="fa-solid fa-file-lines" style="margin-right:4px"></i>Rapor Bulguları (OCR veya Manuel)</label>
-                            <textarea class="ocr-ta" id="bulgu" placeholder="Ultrason raporu bulguları buraya yazılacak veya OCR ile doldurulacak..." style="min-height:100px"></textarea>
+                        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:14px;">
+                            <div>
+                                <label class="field-label" for="hb">Hb (g/dL)</label>
+                                <input type="number" step="0.1" class="input-field" id="hb" placeholder="Hb">
+                            </div>
+                            <div>
+                                <label class="field-label" for="urikAsit">Urik Asit (mg/dL)</label>
+                                <input type="number" step="0.1" class="input-field" id="urikAsit" placeholder="Urik Asit">
+                            </div>
+                            <div>
+                                <label class="field-label" for="albumin">Albumin (g/dL)</label>
+                                <input type="number" step="0.1" class="input-field" id="albumin" placeholder="Albumin">
+                            </div>
+                            <div>
+                                <label class="field-label" for="totalProtein">Total Protein (g/dL)</label>
+                                <input type="number" step="0.1" class="input-field" id="totalProtein" placeholder="Total Protein">
+                            </div>
+                            <div>
+                                <label class="field-label" for="trombosit">Trombosit (10^3/uL)</label>
+                                <input type="number" class="input-field" id="trombosit" placeholder="Trombosit">
+                            </div>
+                            <div>
+                                <label class="field-label" for="dDimer">D-Dimer (ug/mL FEU)</label>
+                                <input type="number" step="0.01" class="input-field" id="dDimer" placeholder="D-Dimer">
+                            </div>
+                            <div>
+                                <label class="field-label" for="inr">INR</label>
+                                <input type="number" step="0.01" class="input-field" id="inr" placeholder="INR">
+                            </div>
+                            <div>
+                                <label class="field-label" for="aptt">APTT (sn)</label>
+                                <input type="number" step="0.1" class="input-field" id="aptt" placeholder="APTT">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Laboratuvar -->
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t"><i class="fa-solid fa-vial"></i><span>Laboratuvar Sonuçları</span></div>
-                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-                            <div><label class="fl" for="hb">Hb (g/dL)</label><input type="number" step="0.1" class="ipt" id="hb" placeholder="Hb"></div>
-                            <div><label class="fl" for="ua">Ürik Asit (mg/dL)</label><input type="number" step="0.1" class="ipt" id="ua" placeholder="Ürik Asit"></div>
-                            <div><label class="fl" for="alb">Albümin (g/dL)</label><input type="number" step="0.1" class="ipt" id="alb" placeholder="Albümin"></div>
-                            <div><label class="fl" for="tp">Total Protein (g/dL)</label><input type="number" step="0.1" class="ipt" id="tp" placeholder="Total Protein"></div>
-                            <div><label class="fl" for="trp">Trombosit (10³/µL)</label><input type="number" class="ipt" id="trp" placeholder="Trombosit"></div>
-                            <div><label class="fl" for="dd">D-Dimer (µg/mL FEU)</label><input type="number" step="0.01" class="ipt" id="dd" placeholder="D-Dimer"></div>
-                            <div><label class="fl" for="inr">INR</label><input type="number" step="0.01" class="ipt" id="inr" placeholder="INR"></div>
-                            <div><label class="fl" for="aptt">APTT (sn)</label><input type="number" step="0.1" class="ipt" id="aptt" placeholder="APTT"></div>
-                        </div>
-                    </div>
-
-                    <!-- Aksiyon -->
-                    <div style="display:flex;gap:12px;flex-wrap:wrap">
-                        <button class="btn btn-p" onclick="savePatient()" style="flex:1;min-width:160px"><i class="fa-solid fa-floppy-disk"></i> Kaydet</button>
-                        <button class="btn btn-d" onclick="clearForm()" style="min-width:120px"><i class="fa-solid fa-eraser"></i> Temizle</button>
+                    <!-- Aksiyon Butonları -->
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="savePatient()" style="flex:1; min-width:160px;">
+                            <i class="fa-solid fa-floppy-disk"></i> Kaydet
+                        </button>
+                        <button class="btn btn-danger" onclick="clearForm()" style="min-width:120px;">
+                            <i class="fa-solid fa-eraser"></i> Temizle
+                        </button>
                     </div>
                 </div>
 
-                <!-- Sağ -->
-                <div style="display:flex;flex-direction:column;gap:20px;position:sticky;top:24px">
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t"><i class="fa-solid fa-signal"></i><span>Canlı Durum</span></div>
-                        <div id="sts">
-                            <div class="st-i act" data-s="1"><div class="st-c"><i class="fa-solid fa-1" style="font-size:11px"></i></div><div class="st-t">Hasta bilgi görüntüsü yükle veya bilgileri gir</div></div>
-                            <div class="st-i" data-s="2"><div class="st-c"><i class="fa-solid fa-2" style="font-size:11px"></i></div><div class="st-t">Rapor dosyasını yükle veya sonuçları gir</div></div>
-                            <div class="st-i" data-s="3"><div class="st-c"><i class="fa-solid fa-3" style="font-size:11px"></i></div><div class="st-t">Laboratuvar sonuçlarını gir</div></div>
-                            <div class="st-i" data-s="4"><div class="st-c"><i class="fa-solid fa-4" style="font-size:11px"></i></div><div class="st-t">Kontrol et ve Kaydet</div></div>
-                            <div class="st-i" data-s="5"><div class="st-c"><i class="fa-solid fa-5" style="font-size:11px"></i></div><div class="st-t">Tüm hastaları işledikten sonra Excel'e aktar</div></div>
-                        </div>
-                    </div>
+                <!-- Sağ Sütun -->
+                <div style="display:flex; flex-direction:column; gap:20px; position:sticky; top:24px;">
 
-                    <div class="card" style="padding:20px">
-                        <div class="sec-t"><i class="fa-solid fa-list-check"></i><span>Kayıtlı Hastalar</span><span style="font-size:12px;color:var(--text-m);font-weight:400;margin-left:auto" id="pcl">0 kayıt</span></div>
-                        <div id="pl" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;padding-right:4px">
-                            <div style="text-align:center;padding:30px 20px;color:var(--text-m)">
-                                <i class="fa-solid fa-inbox" style="font-size:28px;margin-bottom:8px;display:block;opacity:.4"></i>
-                                <p style="font-size:13px">Henüz kayıtlı hasta yok</p>
+                    <!-- Canlı Durum -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-signal"></i>
+                            <span>Canli Durum</span>
+                        </div>
+                        <div id="statusSteps">
+                            <div class="step-item active" data-step="1">
+                                <div class="step-icon"><i class="fa-solid fa-1" style="font-size:11px;"></i></div>
+                                <div class="step-text">Hasta bilgi goruntusu yukleyin veya bilgileri manuel girin</div>
+                            </div>
+                            <div class="step-item" data-step="2">
+                                <div class="step-icon"><i class="fa-solid fa-2" style="font-size:11px;"></i></div>
+                                <div class="step-text">Rapor dosyasini yukleyin veya DVT sonuclarini manuel girin</div>
+                            </div>
+                            <div class="step-item" data-step="3">
+                                <div class="step-icon"><i class="fa-solid fa-3" style="font-size:11px;"></i></div>
+                                <div class="step-text">Laboratuvar sonuclarini girin</div>
+                            </div>
+                            <div class="step-item" data-step="4">
+                                <div class="step-icon"><i class="fa-solid fa-4" style="font-size:11px;"></i></div>
+                                <div class="step-text">Bilgileri kontrol edin</div>
+                            </div>
+                            <div class="step-item" data-step="5">
+                                <div class="step-icon"><i class="fa-solid fa-5" style="font-size:11px;"></i></div>
+                                <div class="step-text">Kaydet butonuna basin</div>
+                            </div>
+                            <div class="step-item" data-step="6">
+                                <div class="step-icon"><i class="fa-solid fa-6" style="font-size:11px;"></i></div>
+                                <div class="step-text">Tum hastalari isledikten sonra Excel'e aktarin</div>
                             </div>
                         </div>
                     </div>
 
-                    <button class="btn btn-w" onclick="exportToExcel()" id="exBtn" disabled style="width:100%;padding:14px"><i class="fa-solid fa-file-excel"></i> Excel'e Aktar</button>
+                    <!-- Kayıtlı Hastalar -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Kayitli Hastalar</span>
+                            <span style="font-size:12px; color:var(--text-muted); font-weight:400; margin-left:auto;" id="patientCountLabel">0 kayit</span>
+                        </div>
+                        <div id="patientList" style="display:flex; flex-direction:column; gap:8px; max-height:340px; overflow-y:auto; padding-right:4px;">
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox" style="font-size:28px; margin-bottom:8px; display:block; opacity:0.4;"></i>
+                                <p style="font-size:13px;">Henuz kayitli hasta yok</p>
+                                <p style="font-size:11px; margin-top:4px;">Bilgileri doldurup Kaydet'e basin</p>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                        <div class="sb"><div class="sv" id="sp">0</div><div class="sl">DVT Pozitif</div></div>
-                        <div class="sb"><div class="sv" id="sn">0</div><div class="sl">DVT Negatif</div></div>
+                    <!-- Excel Aktarım -->
+                    <button class="btn btn-warning" onclick="exportToExcel()" id="excelBtn" disabled style="width:100%; padding:14px;">
+                        <i class="fa-solid fa-file-excel"></i> Excel'e Aktar
+                    </button>
+
+                    <!-- İstatistikler -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="stat-box">
+                            <div class="stat-value" id="statPositive">0</div>
+                            <div class="stat-label">DVT Pozitif</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="statNegative">0</div>
+                            <div class="stat-label">DVT Negatif</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
 
-        <footer style="border-top:1px solid var(--border);padding:14px 24px;text-align:center">
-            <p style="font-size:11px;color:var(--text-m)">HBYS Veri Toplama Paneli v2.0 — OCR Destekli Otomatik Veri Toplama</p>
+        <!-- Footer -->
+        <footer style="border-top:1px solid var(--border); padding:14px 24px; text-align:center;">
+            <p style="font-size:11px; color:var(--text-muted);">HBYS Veri Toplama Paneli v1.0 — OCR destekli otomatik veri toplama araci</p>
         </footer>
     </div>
 
-<script>
-/* PDF.js Worker */
-if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-/* Global durum */
-let patients=[], pidCtr=1, curStep=1, pendingAction=null;
-
-/* ====== Yardımcılar ====== */
-const norm=s=>s.toLowerCase().replace(/ö/g,'o').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/î/g,'i').replace(/û/g,'u').replace(/\s+/g,' ').trim();
-const $=id=>document.getElementById(id);
-
-function toast(msg,type='inf',dur=3500){
-    const c=$('tc'),t=document.createElement('div');
-    t.className='toast '+({suc:'suc',err:'err',wrn:'wrn',inf:'inf'}[type]||'inf');
-    const ic={suc:'fa-circle-check',err:'fa-circle-xmark',wrn:'fa-triangle-exclamation',inf:'fa-circle-info'};
-    t.innerHTML=`<i class="fa-solid ${ic[type]||ic.inf}"></i><span>${msg}</span>`;
-    c.appendChild(t);
-    setTimeout(()=>{t.classList.add('rm');setTimeout(()=>t.remove(),300)},dur);
-}
-
-function showOcr(t,d){$('ocrMoT').textContent=t;$('ocrMoD').textContent=d;$('ocrPb').style.width='0%';$('ocrSt').textContent='Hazırlanıyor...';$('ocrMo').style.display='flex'}
-function upOcr(p,s){$('ocrPb').style.width=Math.round(p*100)+'%';$('ocrSt').textContent=s}
-function hideOcr(){$('ocrMo').style.display='none'}
-
-function maf(id,v){const e=$(id);if(!e||!v)return;e.value=v;e.classList.add('af','aff');setTimeout(()=>e.classList.remove('aff'),600)}
-function msaf(id,v){const e=$(id);if(!e||!v)return;const opts=Array.from(e.options).map(o=>o.value);const m=opts.find(o=>norm(o)===norm(v));if(m){e.value=m;e.classList.add('af','aff');setTimeout(()=>e.classList.remove('aff'),600)}}
-
-function normDate(s){const m=s.match(/(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/);if(m)return`${m[1].padStart(2,'0')}/${m[2].padStart(2,'0')}/${m[3]}`;return s}
-function calcAge(s){const m=s.match(/(\d{2})[\/\.](\d{2})[\/\.](\d{4})/);if(!m)return null;const b=new Date(+m[3],+m[2]-1,+m[1]),t=new Date();let a=t.getFullYear()-b.getFullYear();if(t.getMonth()-b.getMonth()<0||(t.getMonth()-b.getMonth()===0&&t.getDate()<b.getDate()))a--;return a}
-
-/* ====== Görüntü Ön İşleme (OCR doğruluğu artırmak için) ====== */
-function preprocessCanvas(canvas){
-    const c=document.createElement('canvas');
-    c.width=canvas.width;c.height=canvas.height;
-    const ctx=c.getContext('2d');
-    ctx.drawImage(canvas,0,0);
-    const img=ctx.getImageData(0,0,c.width,c.height);
-    const d=img.data;
-    // Griye çevir + contrast artır + threshold
-    for(let i=0;i<d.length;i+=4){
-        let gray=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
-        // Contrast artır
-        gray=((gray-128)*1.5)+128;
-        gray=Math.max(0,Math.min(255,gray));
-        // Threshold (ikili hale getir)
-        const val=gray>140?255:0;
-        d[i]=val;d[i+1]=val;d[i+2]=val;
-    }
-    ctx.putImageData(img,0,0);
-    return c;
-}
-
-/* ====== PDF → Canvas ====== */
-async function pdf2canvas(file){
-    const ab=await file.arrayBuffer();
-    const pdf=await pdfjsLib.getDocument({data:ab}).promise;
-    // Tüm sayfaları oku (çok sayfalı raporlar için)
-    let fullCanvas=null;
-    for(let i=1;i<=pdf.numPages;i++){
-        const page=await pdf.getPage(i);
-        const vp=page.getViewport({scale:2.0});
-        const cv=document.createElement('canvas');
-        cv.width=vp.width;cv.height=vp.height;
-        await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
-        if(!fullCanvas){
-            fullCanvas=cv;
-        }else{
-            // Sayfaları alt alta birleştir
-            const mc=document.createElement('canvas');
-            mc.width=fullCanvas.width;
-            mc.height=fullCanvas.height+cv.height;
-            const mctx=mc.getContext('2d');
-            mctx.drawImage(fullCanvas,0,0);
-            mctx.drawImage(cv,0,fullCanvas.height);
-            fullCanvas=mc;
-        }
-    }
-    return fullCanvas;
-}
-
-/* ====== OCR Çalıştır ve textarea'a yaz ====== */
-async function runOcr(file, textareaId){
-    showOcr('Dosya Analiz Ediliyor','Görüntü işleniyor ve metin çıkarılıyor...');
-    try{
-        let imageData=file;
-        if(file.type==='application/pdf'){
-            upOcr(0.05,'PDF okunuyor...');
-            imageData=await pdf2canvas(file);
-            upOcr(0.15,'Görüntü hazırlandı');
+    <script>
+        /* ===================================================
+           PDF.js Worker Ayari
+        =================================================== */
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
 
-        // Canvas ise ön işleme yap
-        let processedImage=imageData;
-        if(imageData instanceof HTMLCanvasElement){
-            upOcr(0.18,'Görüntü ön işleme (kontrast, threshold)...');
-            processedImage=preprocessCanvas(imageData);
+        /* ===================================================
+           Global Durum
+        =================================================== */
+        let patients = []; // Kaydedilmiş hastalar
+        let patientIdCounter = 1; // Otomatik ID sayacı
+        let currentStep = 1; // Aktif durum adımı
+
+        /* ===================================================
+           Yardimci Fonksiyonlar
+        =================================================== */
+
+        // Türkçe karakterleri normalize et (OCR hataları için)
+        function normalizeTurkish(str) {
+            return str.toLowerCase()
+                .replace(/ö/g, 'o').replace(/ü/g, 'u')
+                .replace(/ş/g, 's').replace(/ç/g, 'c')
+                .replace(/ğ/g, 'g').replace(/ı/g, 'i')
+                .replace(/î/g, 'i').replace(/û/g, 'u')
+                .replace(/\s+/g, ' ').trim();
         }
 
-        const {data:{text}}=await Tesseract.recognize(processedImage,'tur+eng',{
-            logger:m=>{
-                if(m.status==='recognizing text') upOcr(0.2+m.progress*0.75,`Metin tanınıyor... %${Math.round(m.progress*100)}`);
-                else if(m.status==='loading language traineddata') upOcr(0.02+m.progress*0.16,'Dil verisi indiriliyor... (ilk kullanımda sürebilir)');
+        // Toast bildirimi göster
+        function showToast(message, type = 'info', duration = 3500) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-xmark',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            };
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('removing');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // OCR Modal kontrolü
+        function showOcrModal(title, desc) {
+            document.getElementById('ocrModalTitle').textContent = title;
+            document.getElementById('ocrModalDesc').textContent = desc;
+            document.getElementById('ocrProgress').style.width = '0%';
+            document.getElementById('ocrStatusText').textContent = 'Hazirlaniyor...';
+            document.getElementById('ocrModal').style.display = 'flex';
+        }
+        function updateOcrProgress(percent, statusText) {
+            document.getElementById('ocrProgress').style.width = Math.round(percent * 100) + '%';
+            document.getElementById('ocrStatusText').textContent = statusText;
+        }
+        function hideOcrModal() {
+            document.getElementById('ocrModal').style.display = 'none';
+        }
+
+        // Alanı otomatik doldurulmuş olarak işaretle ve flash animasyonu yap
+        function markAutoFilled(fieldId, value) {
+            const field = document.getElementById(fieldId);
+            if (!field || !value) return;
+            field.value = value;
+            field.classList.add('auto-filled', 'auto-fill-flash');
+            setTimeout(() => field.classList.remove('auto-fill-flash'), 600);
+        }
+
+        // Select alanını otomatik doldur
+        function markSelectAutoFilled(fieldId, value) {
+            const field = document.getElementById(fieldId);
+            if (!field || !value) return;
+            // Önce değerin select option'ında var mı kontrol et
+            const options = Array.from(field.options).map(o => o.value);
+            const match = options.find(o => normalizeTurkish(o) === normalizeTurkish(value));
+            if (match) {
+                field.value = match;
+                field.classList.add('auto-filled', 'auto-fill-flash');
+                setTimeout(() => field.classList.remove('auto-fill-flash'), 600);
+            }
+        }
+
+        // Tarih formatını standartlaştır
+        function normalizeDate(str) {
+            // DD/MM/YYYY veya DD.MM/YYYY veya YYYY-MM-DD
+            const match = str.match(/(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/);
+            if (match) return `${match[1].padStart(2,'0')}/${match[2].padStart(2,'0')}/${match[3]}`;
+            return str;
+        }
+
+        // Yaş hesapla (doğum tarihinden)
+        function calculateAge(dateStr) {
+            const match = dateStr.match(/(\d{2})[\/\.](\d{2})[\/\.](\d{4})/);
+            if (!match) return null;
+            const day = parseInt(match[1]), month = parseInt(match[2]), year = parseInt(match[3]);
+            const birthDate = new Date(year, month - 1, day);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+            return age;
+        }
+
+        /* ===================================================
+           Canlı Durum Güncelleme
+        =================================================== */
+        function updateStatus(step) {
+            if (step > currentStep) currentStep = step;
+            document.querySelectorAll('#statusSteps .step-item').forEach(item => {
+                const s = parseInt(item.dataset.step);
+                item.classList.remove('active', 'completed');
+                if (s < currentStep) {
+                    item.classList.add('completed');
+                    item.querySelector('.step-icon').innerHTML = '<i class="fa-solid fa-check" style="font-size:12px;"></i>';
+                } else if (s === currentStep) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Form değişikliklerini dinle ve durumu güncelle
+        function attachFormListeners() {
+            // Hasta bilgileri değiştiğinde adım 1'i tamamla
+            const patientFields = ['tcKimlik', 'adSoyad'];
+            patientFields.forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    if (document.getElementById('tcKimlik').value || document.getElementById('adSoyad').value) {
+                        updateStatus(2);
+                    }
+                });
+            });
+
+            // DVT sonuçları değiştiğinde adım 2'yi tamamla
+            ['dvtSonucu', 'lokalizasyon', 'taraf'].forEach(id => {
+                document.getElementById(id).addEventListener('change', () => {
+                    if (document.getElementById('dvtSonucu').value) {
+                        updateStatus(3);
+                    }
+                });
+            });
+
+            // Laboratuvar değerleri değiştiğinde adım 3'ü tamamla
+            ['hb', 'urikAsit', 'albumin', 'totalProtein', 'trombosit', 'dDimer', 'inr', 'aptt'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    const hasLab = ['hb', 'urikAsit', 'albumin', 'totalProtein', 'trombosit', 'dDimer', 'inr', 'aptt']
+                        .some(fid => document.getElementById(fid).value);
+                    if (hasLab) updateStatus(4);
+                });
+            });
+        }
+
+        /* ===================================================
+           Hasta Bilgi Ekran Görüntüsü OCR
+        =================================================== */
+        async function processPatientImage(file) {
+            showOcrModal('Hasta Bilgisi Analiz Ediliyor', 'Ekran goruntusundeki bilgiler cikartiliyor...');
+            try {
+                let imageData = file;
+                // PDF ise canvas'a çevir
+                if (file.type === 'application/pdf') {
+                    updateOcrProgress(0.1, 'PDF dosyasi okunuyor...');
+                    imageData = await pdfToCanvas(file);
+                    updateOcrProgress(0.2, 'Gorsel hazirlandi, OCR basliyor...');
+                }
+
+                const { data: { text } } = await Tesseract.recognize(imageData, 'tur+eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            updateOcrProgress(0.2 + m.progress * 0.7, `Metin taniniyor... %${Math.round(m.progress * 100)}`);
+                        } else if (m.status === 'loading language traineddata') {
+                            updateOcrProgress(0.05 + m.progress * 0.15, 'Dil verisi indiriliyor... (ilk kullanimda biraz surebilir)');
+                        }
+                    }
+                });
+
+                updateOcrProgress(0.95, 'Bilgiler cikartiliyor...');
+                await new Promise(r => setTimeout(r, 300));
+
+                const normalized = normalizeTurkish(text);
+                let filledCount = 0;
+
+                // TC Kimlik
+                const tcMatch = text.match(/Kimlik[:\s]*(\d{11})/i) || text.match(/(?<!\d)(\d{11})(?!\d)/);
+                if (tcMatch) { markAutoFilled('tcKimlik', tcMatch[1]); filledCount++; }
+
+                // Adı
+                const adiMatch = text.match(/Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Soyadi|Baba|Doğum|Cinsiyet|Kimlik|$))/i);
+                if (adiMatch) {
+                    const adi = adiMatch[1].trim();
+                    if (adi.length > 1) {
+                        // Soyadı da ayrı var mı kontrol et
+                        const soyadiMatch = text.match(/Soyadi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|$))/i);
+                        const soyadi = soyadiMatch ? soyadiMatch[1].trim() : '';
+                        const full = soyadi ? `${adi} ${soyadi}` : adi;
+                        markAutoFilled('adSoyad', full);
+                        filledCount++;
+                    }
+                }
+
+                // Ad Soyad birlikte geçiyorsa (başka formatta)
+                if (!document.getElementById('adSoyad').value) {
+                    const adSoyadMatch = text.match(/Ad\s*Soyad[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|Yaş|$))/i);
+                    if (adSoyadMatch && adSoyadMatch[1].trim().length > 2) {
+                        markAutoFilled('adSoyad', adSoyadMatch[1].trim());
+                        filledCount++;
+                    }
+                }
+
+                // Baba Adı
+                const babaMatch = text.match(/Baba\s*Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*(Doğum|Cinsiyet|Kimlik|Adi|Soyadi|$))/i);
+                if (babaMatch && babaMatch[1].trim().length > 1) {
+                    markAutoFilled('babaAdi', babaMatch[1].trim());
+                    filledCount++;
+                }
+
+                // Doğum Tarihi
+                const dogumMatch = text.match(/Doğum\s*Tari[hf]\w*[:\s]*(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/i)
+                    || text.match(/(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/);
+                if (dogumMatch) {
+                    const date = normalizeDate(dogumMatch[1]);
+                    markAutoFilled('dogumTarihi', date);
+                    filledCount++;
+                    // Yaş hesapla
+                    const age = calculateAge(date);
+                    if (age !== null && age > 0 && age < 150) {
+                        markAutoFilled('yas', age.toString());
+                        filledCount++;
+                    }
+                }
+
+                // SGK No
+                const sgkMatch = text.match(/Sosyal\s*Guvenlik\s*No[:\s]*(\d+)/i) || text.match(/SGK\s*No[:\s]*(\d+)/i);
+                if (sgkMatch) { markAutoFilled('sgkNo', sgkMatch[1]); filledCount++; }
+
+                // Cinsiyet
+                if (/erkek/i.test(normalized)) { markSelectAutoFilled('cinsiyet', 'Erkek'); filledCount++; }
+                else if (/kadin|kad.n/i.test(normalized)) { markSelectAutoFilled('cinsiyet', 'Kadin'); filledCount++; }
+
+                hideOcrModal();
+                if (filledCount > 0) {
+                    showToast(`${filledCount} alan otomatik dolduruldu. Lutfen kontrol edin.`, 'success');
+                    updateStatus(2);
+                } else {
+                    showToast('Bilgi cikartilamadi. Manuel girmeyi deneyin.', 'warning');
+                }
+            } catch (err) {
+                hideOcrModal();
+                console.error('Hasta OCR hatası:', err);
+                showToast('OCR islemi basarisiz: ' + err.message, 'error');
+            }
+        }
+
+        /* ===================================================
+           Rapor Dosyası OCR
+        =================================================== */
+        async function processReportFile(file) {
+            showOcrModal('Rapor Analiz Ediliyor', 'Rapor bulgulari cikartiliyor...');
+            try {
+                let imageData = file;
+                if (file.type === 'application/pdf') {
+                    updateOcrProgress(0.1, 'PDF dosyasi okunuyor...');
+                    imageData = await pdfToCanvas(file);
+                    updateOcrProgress(0.2, 'Gorsel hazirlandi, OCR basliyor...');
+                }
+
+                const { data: { text } } = await Tesseract.recognize(imageData, 'tur+eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            updateOcrProgress(0.2 + m.progress * 0.7, `Rapor taniniyor... %${Math.round(m.progress * 100)}`);
+                        } else if (m.status === 'loading language traineddata') {
+                            updateOcrProgress(0.05 + m.progress * 0.15, 'Dil verisi indiriliyor...');
+                        }
+                    }
+                });
+
+                updateOcrProgress(0.95, 'Bulgular cikartiliyor...');
+                await new Promise(r => setTimeout(r, 300));
+
+                const normalized = normalizeTurkish(text);
+                let filledCount = 0;
+
+                // DVT Sonucu — tromboflebit, tromboz, thrombosis, dvt, venöz trombo vb.
+                const dvtPositivePatterns = /tromboflebit|tromboz|thrombosi|dvt|venoz\s*trombo|deep\s*vein\s*thrombosis|trombus/i;
+                const dvtNegativePatterns = /tromboz\s*(bulunmamakt|yok|gorulmed|tespit\s*edilmed)|ven\s*tromboz\s*(yok|bulunmamakt)|normal\s*ven|patoloji\s*(yok|bulunmamakt)/i;
+
+                if (dvtPositivePatterns.test(text) && !dvtNegativePatterns.test(text)) {
+                    markSelectAutoFilled('dvtSonucu', 'Pozitif');
+                    filledCount++;
+                } else if (dvtNegativePatterns.test(text) || /normal/i.test(normalized) && !dvtPositivePatterns.test(text)) {
+                    markSelectAutoFilled('dvtSonucu', 'Negatif');
+                    filledCount++;
+                }
+
+                // Taraf
+                const isSol = /sol\s*(alt|ust)?\s*(ekstremite|bacak|taraf|extrem|ven)/i.test(text)
+                    || /\bsol\b/i.test(normalized) && /ekstremite|bacak|ven|doppler/i.test(normalized);
+                const isSag = /sag\s*(alt|ust)?\s*(ekstremite|bacak|taraf|extrem|ven)/i.test(text)
+                    || /\bsag\b/i.test(normalized) && /ekstremite|bacak|ven|doppler/i.test(normalized);
+                const isBilateral = /bilateral|iki\s*taraf|cift\s*taraf/i.test(normalized);
+
+                if (isBilateral) {
+                    markSelectAutoFilled('taraf', 'Bilateral');
+                    filledCount++;
+                } else if (isSol && isSag) {
+                    markSelectAutoFilled('taraf', 'Bilateral');
+                    filledCount++;
+                } else if (isSol) {
+                    markSelectAutoFilled('taraf', 'Sol');
+                    filledCount++;
+                } else if (isSag) {
+                    markSelectAutoFilled('taraf', 'Sag');
+                    filledCount++;
+                }
+
+                // Lokalizasyon
+                const isProksimal = /proksimal/i.test(normalized);
+                const isDistal = /distal/i.test(normalized);
+
+                if (isProksimal && isDistal) {
+                    markSelectAutoFilled('lokalizasyon', 'Proksimal + Distal');
+                    filledCount++;
+                } else if (isProksimal) {
+                    markSelectAutoFilled('lokalizasyon', 'Proksimal');
+                    filledCount++;
+                } else if (isDistal) {
+                    markSelectAutoFilled('lokalizasyon', 'Distal');
+                    filledCount++;
+                }
+
+                // Rapor içinde hasta bilgisi de varsa onları da doldurmaya çalış
+                if (!document.getElementById('tcKimlik').value) {
+                    const tcMatch = text.match(/(?:TC\s*)?Kimlik\s*No[:\s]*(\d{11})/i) || text.match(/(?<!\d)(\d{11})(?!\d)/);
+                    if (tcMatch) { markAutoFilled('tcKimlik', tcMatch[1]); filledCount++; }
+                }
+
+                hideOcrModal();
+                if (filledCount > 0) {
+                    showToast(`${filledCount>0?filledCount:''} rapor alani otomatik dolduruldu. Lutfen kontrol edin.`, 'success');
+                    updateStatus(3);
+                } else {
+                    showToast('Rapor bulgulari cikartilamadi. Manuel girmeyi deneyin.', 'warning');
+                }
+            } catch (err) {
+                hideOcrModal();
+                console.error('Rapor OCR hatası:', err);
+                showToast('Rapor analizi basarisiz: ' + err.message, 'error');
+            }
+        }
+
+        /* ===================================================
+           PDF → Canvas Dönüşümü
+        =================================================== */
+        async function pdfToCanvas(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const page = await pdf.getPage(1); // İlk sayfa
+            const viewport = page.getViewport({ scale: 2.0 });
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            const ctx = canvas.getContext('2d');
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            return canvas;
+        }
+
+        /* ===================================================
+           Panodan Yapıştır (Clipboard)
+        =================================================== */
+        async function pasteFromClipboard(type) {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (!text || text.trim().length < 10) {
+                    showToast('Panoda yeterli metin bulunamadi.', 'warning');
+                    return;
+                }
+
+                if (type === 'patient') {
+                    // Hasta bilgisi metnini parse et
+                    const normalized = normalizeTurkish(text);
+                    let filledCount = 0;
+
+                    const tcMatch = text.match(/Kimlik[:\s]*(\d{11})/i) || text.match(/(?<!\d)(\d{11})(?!\d)/);
+                    if (tcMatch) { markAutoFilled('tcKimlik', tcMatch[1]); filledCount++; }
+
+                    const adiMatch = text.match(/Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Soyadi|Baba|Doğum|Cinsiyet|$))/i);
+                    const soyadiMatch = text.match(/Soyadi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|$))/i);
+                    if (adiMatch) {
+                        const adi = adiMatch[1].trim();
+                        const soyadi = soyadiMatch ? soyadiMatch[1].trim() : '';
+                        markAutoFilled('adSoyad', soyadi ? `${adi} ${soyadi}` : adi);
+                        filledCount++;
+                    }
+
+                    const babaMatch = text.match(/Baba\s*Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*(Doğum|Cinsiyet|$))/i);
+                    if (babaMatch) { markAutoFilled('babaAdi', babaMatch[1].trim()); filledCount++; }
+
+                    const dogumMatch = text.match(/Doğum\s*Tari[hf]\w*[:\s]*(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/i) || text.match(/(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/);
+                    if (dogumMatch) {
+                        const date = normalizeDate(dogumMatch[1]);
+                        markAutoFilled('dogumTarihi', date);
+                        filledCount++;
+                        const age = calculateAge(date);
+                        if (age && age > 0) { markAutoFilled('yas', age.toString()); filledCount++; }
+                    }
+
+                    const sgkMatch = text.match(/Sosyal\s*Guvenlik\s*No[:\s]*(\d+)/i);
+                    if (sgkMatch) { markAutoFilled('sgkNo', sgkMatch[1]); filledCount++; }
+
+                    if (filledCount > 0) {
+                        showToast(`Panodan ${filledCount} alan dolduruldu.`, 'success');
+                        updateStatus(2);
+                    } else {
+                        showToast('Panodan bilgi cikartilamadi. Farkli bir metin deneyin.', 'warning');
+                    }
+                } else if (type === 'report') {
+                    // Radyoloji raporu metnini parse et
+                    const normalized = normalizeTurkish(text);
+                    let filledCount = 0;
+
+                    const dvtPositive = /tromboflebit|tromboz|thrombosi|dvt|venoz\s*trombo|deep\s*vein/i.test(text);
+                    const dvtNegative = /tromboz\s*(yok|bulunmamakt|gorulmed|tespit edilmed)/i.test(text);
+
+                    if (dvtPositive && !dvtNegative) {
+                        markSelectAutoFilled('dvtSonucu', 'Pozitif'); filledCount++;
+                    } else if (dvtNegative) {
+                        markSelectAutoFilled('dvtSonucu', 'Negatif'); filledCount++;
+                    }
+
+                    const isSol = /sol\s*(alt|ust)?\s*(ekstremite|bacak)/i.test(text);
+                    const isSag = /sag\s*(alt|ust)?\s*(ekstremite|bacak)/i.test(text);
+                    const isBilateral = /bilateral/i.test(text);
+
+                    if (isBilateral || (isSol && isSag)) {
+                        markSelectAutoFilled('taraf', 'Bilateral'); filledCount++;
+                    } else if (isSol) {
+                        markSelectAutoFilled('taraf', 'Sol'); filledCount++;
+                    } else if (isSag) {
+                        markSelectAutoFilled('taraf', 'Sag'); filledCount++;
+                    }
+
+                    const isProx = /proksimal/i.test(normalized);
+                    const isDist = /distal/i.test(normalized);
+                    if (isProx && isDist) {
+                        markSelectAutoFilled('lokalizasyon', 'Proksimal + Distal'); filledCount++;
+                    } else if (isProx) {
+                        markSelectAutoFilled('lokalizasyon', 'Proksimal'); filledCount++;
+                    } else if (isDist) {
+                        markSelectAutoFilled('lokalizasyon', 'Distal'); filledCount++;
+                    }
+
+                    if (filledCount > 0) {
+                        showToast(`Panodan ${filledCount} rapor alani dolduruldu.`, 'success');
+                        updateStatus(3);
+                    } else {
+                        showToast('Panodan rapor bilgisi cikartilamadi.', 'warning');
+                    }
+                }
+            } catch (err) {
+                showToast('Panodan okuma basarisiz. Pano erisim izni verin.', 'error');
+            }
+        }
+
+        /* ===================================================
+           Hasta Kaydetme
+        =================================================== */
+        function savePatient() {
+            const adSoyad = document.getElementById('adSoyad').value.trim();
+            const dvtSonucu = document.getElementById('dvtSonucu').value;
+
+            // En azından ad soyad veya TC olmalı
+            if (!adSoyad && !document.getElementById('tcKimlik').value.trim()) {
+                showToast('En az Ad Soyad veya TC Kimlik girilmelidir.', 'error');
+                return;
+            }
+
+            const patient = {
+                id: patientIdCounter++,
+                hastaId: document.getElementById('hastaId').value || `HST-${String(patientIdCounter - 1).padStart(4, '0')}`,
+                tcKimlik: document.getElementById('tcKimlik').value.trim(),
+                adSoyad: adSoyad || 'Bilinmeyen',
+                yas: document.getElementById('yas').value,
+                cinsiyet: document.getElementById('cinsiyet').value,
+                babaAdi: document.getElementById('babaAdi').value.trim(),
+                dogumTarihi: document.getElementById('dogumTarihi').value.trim(),
+                sgkNo: document.getElementById('sgkNo').value.trim(),
+                kayitTarihi: document.getElementById('kayitTarihi').value || new Date().toISOString().split('T')[0],
+                dvtSonucu: dvtSonucu,
+                lokalizasyon: document.getElementById('lokalizasyon').value,
+                taraf: document.getElementById('taraf').value,
+                hb: document.getElementById('hb').value,
+                urikAsit: document.getElementById('urikAsit').value,
+                albumin: document.getElementById('albumin').value,
+                totalProtein: document.getElementById('totalProtein').value,
+                trombosit: document.getElementById('trombosit').value,
+                dDimer: document.getElementById('dDimer').value,
+                inr: document.getElementById('inr').value,
+                aptt: document.getElementById('aptt').value
+            };
+
+            patients.push(patient);
+            renderPatientList();
+            updateStats();
+            clearForm();
+            updateStatus(5);
+            showToast(`${patient.adSoyad} basariyla kaydedildi.`, 'success');
+        }
+
+        /* ===================================================
+           Form Temizle
+        =================================================== */
+        function clearForm() {
+            const fieldIds = ['hastaId', 'tcKimlik', 'adSoyad', 'yas', 'babaAdi', 'dogumTarihi', 'sgkNo',
+                'hb', 'urikAsit', 'albumin', 'totalProtein', 'trombosit', 'dDimer', 'inr', 'aptt'];
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('auto-filled');
+            });
+            const selectIds = ['cinsiyet', 'dvtSonucu', 'lokalizasyon', 'taraf'];
+            selectIds.forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('auto-filled');
+            });
+            // Kayıt tarihini bugüne ayarla
+            document.getElementById('kayitTarihi').value = new Date().toISOString().split('T')[0];
+            // Durumu adım 1'e sıfırla
+            currentStep = 1;
+            document.querySelectorAll('#statusSteps .step-item').forEach((item, i) => {
+                item.classList.remove('active', 'completed');
+                item.querySelector('.step-icon').innerHTML = `<i class="fa-solid fa-${i + 1}" style="font-size:11px;"></i>`;
+            });
+            document.querySelector('#statusSteps .step-item[data-step="1"]').classList.add('active');
+        }
+
+        /* ===================================================
+           Hasta Listesi Render
+        =================================================== */
+        function renderPatientList() {
+            const container = document.getElementById('patientList');
+            const countLabel = document.getElementById('patientCountLabel');
+            const headerCount = document.getElementById('headerCount');
+            const excelBtn = document.getElementById('excelBtn');
+
+            countLabel.textContent = `${patients.length} kayit`;
+            headerCount.textContent = patients.length;
+            excelBtn.disabled = patients.length === 0;
+
+            if (patients.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox" style="font-size:28px; margin-bottom:8px; display:block; opacity:0.4;"></i>
+                        <p style="font-size:13px;">Henuz kayitli hasta yok</p>
+                        <p style="font-size:11px; margin-top:4px;">Bilgileri doldurup Kaydet'e basin</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = patients.map((p, i) => `
+                <div class="patient-item" onclick="loadPatientToForm(${i})">
+                    <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                        <div style="width:32px; height:32px; border-radius:8px; background:${p.dvtSonucu === 'Pozitif' ? 'var(--danger-glow)' : 'rgba(0,230,118,0.08)'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fa-solid fa-user" style="font-size:12px; color:${p.dvtSonucu === 'Pozitif' ? 'var(--danger)' : 'var(--accent)'};"></i>
+                        </div>
+                        <div style="min-width:0;">
+                            <p style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.adSoyad}</p>
+                            <p style="font-size:11px; color:var(--text-muted);">
+                                ${p.taraf ? p.taraf : '?'} ${p.dvtSonucu ? '· ' + p.dvtSonucu : ''}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="delete-btn" onclick="event.stopPropagation(); deletePatient(${i})" title="Hastayi sil">
+                        <i class="fa-solid fa-trash-can" style="font-size:12px;"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* ===================================================
+           Hasta Silme
+        =================================================== */
+        function deletePatient(index) {
+            const name = patients[index].adSoyad;
+            patients.splice(index, 1);
+            renderPatientList();
+            updateStats();
+            showToast(`${name} silindi.`, 'info');
+        }
+
+        /* ===================================================
+           Hasta Bilgisini Forma Yükle (Düzenleme)
+        =================================================== */
+        function loadPatientToForm(index) {
+            const p = patients[index];
+            markAutoFilled('hastaId', p.hastaId);
+            markAutoFilled('tcKimlik', p.tcKimlik);
+            markAutoFilled('adSoyad', p.adSoyad);
+            markAutoFilled('yas', p.yas);
+            markAutoFilled('babaAdi', p.babaAdi);
+            markAutoFilled('dogumTarihi', p.dogumTarihi);
+            markAutoFilled('sgkNo', p.sgkNo);
+            document.getElementById('kayitTarihi').value = p.kayitTarihi;
+            markSelectAutoFilled('cinsiyet', p.cinsiyet);
+            markSelectAutoFilled('dvtSonucu', p.dvtSonucu);
+            markSelectAutoFilled('lokalizasyon', p.lokalizasyon);
+            markSelectAutoFilled('taraf', p.taraf);
+            markAutoFilled('hb', p.hb);
+            markAutoFilled('urikAsit', p.urikAsit);
+            markAutoFilled('albumin', p.albumin);
+            markAutoFilled('totalProtein', p.totalProtein);
+            markAutoFilled('trombosit', p.trombosit);
+            markAutoFilled('dDimer', p.dDimer);
+            markAutoFilled('inr', p.inr);
+            markAutoFilled('aptt', p.aptt);
+
+            // Düzenleme modunda olan hastayı listeden çıkar
+            patients.splice(index, 1);
+            renderPatientList();
+            updateStats();
+            updateStatus(4);
+            showToast(`${p.adSoyad} form yuklendi. Duzenleyip tekrar kaydedin.`, 'info');
+        }
+
+        /* ===================================================
+           İstatistik Güncelle
+        =================================================== */
+        function updateStats() {
+            const pozitif = patients.filter(p => p.dvtSonucu === 'Pozitif').length;
+            const negatif = patients.filter(p => p.dvtSonucu === 'Negatif').length;
+            document.getElementById('statPositive').textContent = pozitif;
+            document.getElementById('statNegative').textContent = negatif;
+        }
+
+        /* ===================================================
+           Excel'e Aktar
+        =================================================== */
+        function exportToExcel() {
+            if (patients.length === 0) {
+                showToast('Aktarilacak hasta kaydi bulunamadi.', 'warning');
+                return;
+            }
+
+            // Excel verisini hazırla
+            const excelData = patients.map(p => ({
+                'Hasta ID': p.hastaId,
+                'TC Kimlik': p.tcKimlik,
+                'Ad Soyad': p.adSoyad,
+                'Yas': p.yas || '',
+                'Cinsiyet': p.cinsiyet || '',
+                'Baba Adi': p.babaAdi,
+                'Dogum Tarihi': p.dogumTarihi,
+                'SGK No': p.sgkNo,
+                'Kayit Tarihi': p.kayitTarihi,
+                'DVT Sonucu': p.dvtSonucu || '',
+                'Lokalizasyon': p.lokalizasyon || '',
+                'Taraf': p.taraf || '',
+                'Hb (g/dL)': p.hb || '',
+                'Urik Asit (mg/dL)': p.urikAsit || '',
+                'Albumin (g/dL)': p.albumin || '',
+                'Total Protein (g/dL)': p.totalProtein || '',
+                'Trombosit (10^3/uL)': p.trombosit || '',
+                'D-Dimer (ug/mL FEU)': p.dDimer || '',
+                'INR': p.inr || '',
+                'APTT (sn)': p.aptt || ''
+            }));
+
+            try {
+                const ws = XLSX.utils.json_to_sheet(excelData);
+
+                // Sütun genişliklerini ayarla
+                ws['!cols'] = [
+                    { wch: 12 }, { wch: 14 }, { wch: 22 }, { wch: 6 }, { wch: 10 },
+                    { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 12 },
+                    { wch: 20 }, { wch: 12 }, { wch: 12 }, { wch: 18 }, { wch: 14 },
+                    { wch: 18 }, { wch: 18 }, { wch: 20 }, { wch: 8 }, { wch: 12 }
+                ];
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Hasta Verileri');
+
+                // Dosya adına tarih ekle
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+                XLSX.writeFile(wb, `HBYS_Verileri_${dateStr}.xlsx`);
+
+                updateStatus(6);
+                showToast(`${patients.length} hasta kaydi Excel'e aktarildi.`, 'success', 4000);
+            } catch (err) {
+                console.error('Excel aktarım hatası:', err);
+                showToast('Excel aktarimi basarisiz: ' + err.message, 'error');
+            }
+        }
+
+        /* ===================================================
+           Dosya Yükleme Event Listener'ları
+        =================================================== */
+        document.getElementById('patientImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Hasta bilgisi icin gorsel dosya secin (PNG, JPG).', 'error');
+                return;
+            }
+            processPatientImage(file);
+            this.value = ''; // Aynı dosyayı tekrar yükleyebilmek için sıfırla
+        });
+
+        document.getElementById('reportFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+                showToast('Rapor icin PDF veya gorsel dosya secin.', 'error');
+                return;
+            }
+            processReportFile(file);
+            this.value = '';
+        });
+
+        // Drag & Drop desteği
+        function setupDragDrop(zoneId, inputId) {
+            const zone = document.getElementById(zoneId);
+            ['dragenter', 'dragover'].forEach(evt => {
+                zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('drag-over'); });
+            });
+            ['dragleave', 'drop'].forEach(evt => {
+                zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('drag-over'); });
+            });
+            zone.addEventListener('drop', e => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = document.getElementById(inputId);
+                    // DataTransfer dosyalarını input'a atayıp change event tetikle
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(files[0]);
+                    input.files = dataTransfer.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+        setupDragDrop('patientUploadZone', 'patientImageInput');
+        setupDragDrop('reportUploadZone', 'reportFileInput');
+
+        /* ===================================================
+           Keyboard Shortcut — Ctrl+S ile kaydet
+        =================================================== */
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                savePatient();
             }
         });
 
-        upOcr(1,'Tamamlandı');
-        await new Promise(r=>setTimeout(r,300));
-        hideOcr();
+        /* ===================================================
+           Başlatma
+        =================================================== */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kayıt tarihini bugüne ayarla
+            document.getElementById('kayitTarihi').value = new Date().toISOString().split('T')[0];
 
-        $(textareaId).value=text;
-        toast('OCR tamamlandı. Lütfen metni kontrol edip "İşle ve Doldur" butonuna basın.','suc',4000);
-        return text;
-    }catch(err){
-        hideOcr();
-        console.error('OCR hatası:',err);
-        toast('OCR başarısız: '+err.message,'err');
-        return '';
-    }
-}
+            // Form dinleyicilerini bağla
+            attachFormListeners();
 
-/* ====== Sekme Geçişi ====== */
-function switchTab(tabId,btn){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('act'));
-    document.querySelectorAll('.tabp').forEach(p=>p.classList.remove('act'));
-    btn.classList.add('act');
-    $('tp-'+tabId).classList.add('act');
-}
-
-/* ====== Dosya Yükleme Eventleri ====== */
- $('fi1').addEventListener('change',function(e){const f=e.target.files[0];if(f){if(!f.type.startsWith('image/')){toast('Görsel dosya seçin (PNG, JPG)','err');return}runOcr(f,'ocr1');this.value=''}});
- $('fi2').addEventListener('change',function(e){const f=e.target.files[0];if(f){if(!f.type.startsWith('image/')&&f.type!=='application/pdf'){toast('PDF veya görsel seçin','err');return}runOcr(f,'ocr2');this.value=''}});
- $('fi3').addEventListener('change',function(e){const f=e.target.files[0];if(f){if(!f.type.startsWith('image/')&&f.type!=='application/pdf'){toast('PDF veya görsel seçin','err');return}runOcr(f,'ocr3');this.value=''}});
-
-// Drag & Drop
-function setupDD(zoneId,inputId){
-    const z=$(zoneId);
-    ['dragenter','dragover'].forEach(e=>z.addEventListener(e,ev=>{ev.preventDefault();z.classList.add('dov')}));
-    ['dragleave','drop'].forEach(e=>z.addEventListener(e,ev=>{ev.preventDefault();z.classList.remove('dov')}));
-    z.addEventListener('drop',ev=>{const fs=ev.dataTransfer.files;if(fs.length>0){const dt=new DataTransfer();dt.items.add(fs[0]);$(inputId).files=dt.files;$(inputId).dispatchEvent(new Event('change'))}});
-}
-setupDD('uz1','fi1');setupDD('uz2','fi2');setupDD('uz3','fi3');
-
-/* ====== Panodan Yapıştır ====== */
-async function pasteClip(type){
-    try{
-        const text=await navigator.clipboard.readText();
-        if(!text||text.trim().length<10){toast('Panoda yeterli metin yok','wrn');return}
-        const map={patient:'ocr1',report:'ocr2',lab:'ocr3'};
-        $(map[type]).value=text;
-        toast('Panodan metin yapıştırıldı. Kontrol edip "İşle" butonuna basın.','suc');
-    }catch(e){toast('Panodan okuma başarısız. Tarayıcı izni verin.','err')}
-}
-
-/* ====== HASTA EŞLEŞTIRME KONTROLÜ ====== */
-function checkPatientMatch(reportText){
-    const formAd=$('ad').value.trim();
-    if(!formAd)return true; // Formda isim yoksa kontrol yapma
-
-    // Rapor metninden isim bul
-    const namePatterns=[
-        /Ad[iı]\s*:\s*([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?:\s*Soyad[iı]|$)/i,
-        /Ad\s*Soyad\s*:\s*([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?:\n|$)/i,
-        /(?:Hasta|Kişi|Adı)\s*:\s*([A-ZÇĞİÖŞÜ][A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?:\s*[,\n(]|$)/i,
-        /([A-ZÇĞİÖŞÜ]{2,}\s+[A-ZÇĞİÖŞÜ]{2,})\s*(?:\n|TC|Kimlik|Doğum)/i
-    ];
-    let reportName='';
-    for(const p of namePatterns){
-        const m=reportText.match(p);
-        if(m&&m[1].trim().length>3){reportName=m[1].trim();break}
-    }
-
-    if(!reportName)return true; // Rapor da isim bulamadıysa geç
-
-    // Karşılaştır (normalizasyon ile)
-    const fn=norm(formAd), rn=norm(reportName);
-    // Tam eşleşme veya biri diğerünü içeriyor mu
-    if(fn===rn || fn.includes(rn) || rn.includes(fn)) return true;
-
-    // Kelime kelime kontrol
-    const fWords=fn.split(' '), rWords=rn.split(' ');
-    let matchCount=0;
-    fWords.forEach(w=>{if(w.length>2 && rWords.some(rw=>rw.includes(w)||w.includes(rw)))matchCount++});
-    if(matchCount>=Math.min(fWords.length,2)) return true;
-
-    // Eşleşmiyor — uyarı göster
-    return {formName:formAd, reportName:reportName};
-}
-
-let mismatchConfirm=false;
-function showWarnModal(formName,reportName,action){
-    $('warnText').innerHTML=`<strong>Formdaki hasta:</strong> ${formName}<br><strong>Rapordaki hasta:</strong> ${reportName}<br><br>Yanlış rapor yüklemiş olabilirsiniz. Lütfen kontrol edin.`;
-    pendingAction=action;
-    mismatchConfirm=false;
-    $('warnModal').style.display='flex';
-}
-function closeWarnModal(){$('warnModal').style.display='none';pendingAction=null}
-function confirmMismatch(){
-    mismatchConfirm=true;
-    $('warnModal').style.display='none';
-    if(pendingAction) pendingAction();
-    pendingAction=null;
-}
-
-/* ====== OKUNAN METNİ İŞLE VE DOLDUR ====== */
-function processOcrText(type){
-    const textMap={patient:$('ocr1').value, report:$('ocr2').value, lab:$('ocr3').value};
-    const text=textMap[type];
-    if(!text||text.trim().length<5){toast('Önce metin yükleyin veya yapıştırın','wrn');return}
-
-    if(type==='patient') processPatientText(text);
-    else if(type==='report'){
-        // Hasta eşleştirme kontrolü
-        const matchResult=checkPatientMatch(text);
-        if(matchResult!==true){
-            showWarnModal(matchResult.formName,matchResult.reportName,()=>processReportText(text));
-            return;
-        }
-        processReportText(text);
-    }
-    else if(type==='lab') processLabText(text);
-}
-
-/* ====== HASTA BİLGİSİ PARSE ====== */
-function processPatientText(text){
-    let cnt=0;
-    const n=norm(text);
-
-    // TC Kimlik — çoklu kalıp
-    const tcPats=[
-        /Kimlik\s*(?:No|Numara)?\s*[:\s\-]*(\d{11})/i,
-        /TC\s*[:\s\-]*(\d{11})/i,
-        /(?<!\d)(\d{11})(?!\d)/
-    ];
-    for(const p of tcPats){const m=text.match(p);if(m){maf('tc',m[1]);cnt++;break}}
-
-    // Adı
-    const adiPats=[
-        /Ad[ıi]\s*[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?:\s*$|\s*(?:Soyad[ıi]|Baba|Doğum|Cinsiyet|Kimlik|TC|SGK|Sosyal))/im,
-        /Ad[ıi]\s*[:\s]+([^\n\r]+?)(?:\s{2,}|\t|$)/m
-    ];
-    let adi='',soyadi='';
-    for(const p of adiPats){const m=text.match(p);if(m&&m[1].trim().length>1){adi=m[1].trim();break}}
-
-    // Soyadı
-    const soyPats=[
-        /Soyad[ıi]\s*[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?:\s*$|\s*(?:Baba|Doğum|Cinsiyet|Kimlik|TC|SGK|Sosyal))/im,
-        /Soyad[ıi]\s*[:\s]+([^\n\r]+?)(?:\s{2,}|\t|$)/m
-    ];
-    for(const p of soyPats){const m=text.match(p);if(m&&m[1].trim().length>1){soyadi=m[1].trim();break}}
-
-    if(adi){
-        const full=soyadi?`${adi} ${soyadi}`:adi;
-        maf('ad',full);cnt++;
-    }
-
-    // Ad Soyad birlikte
-    if(!$('ad').value){
-        const asPats=[
-            /Ad\s*Soyad\s*[:\s]+([^\n\r]+?)(?:\s{2,}|\t|Baba|Doğum|Cinsiyet|$)/im,
-            /(?:Hasta|Kişi)\s*[:\s]+([A-ZÇĞİÖŞÜ][A-ZÇĞİÖŞÜa-zçğıöşü\s]{2,}?)(?:\s{2,}|\n|TC|Kimlik|Doğum|$)/im
-        ];
-        for(const p of asPats){const m=text.match(p);if(m&&m[1].trim().length>3){maf('ad',m[1].trim());cnt++;break}}
-    }
-
-    // Baba Adı
-    const babaPats=[
-        /Baba\s*Ad[ıi]\s*[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?:\s*$|\s*(?:Doğum|Cinsiyet|Kimlik|TC|SGK|Sosyal|Ana))/im,
-        /Baba\s*Ad[ıi]\s*[:\s]+([^\n\r]+?)(?:\s{2,}|\t|$)/m
-    ];
-    for(const p of babaPats){const m=text.match(p);if(m&&m[1].trim().length>1){maf('baba',m[1].trim());cnt++;break}}
-
-    // Doğum Tarihi
-    const dtPats=[
-        /Doğum\s*Tari[hf](?:\s*Beyan)?\s*[:\s]*(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/i,
-        /Doğum\s*Tarihi\s*[:\s]*(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/i,
-        /(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{4})/
-    ];
-    for(const p of dtPats){const m=text.match(p);if(m){const d=normDate(m[1]);maf('dtar',d);cnt++;const age=calcAge(d);if(age&&age>0&&age<150){maf('yas',String(age));cnt++}break}}
-
-    // SGK No
-    const sgkPats=[
-        /Sosyal\s*G.uvenlik\s*No\s*[:\s]*(\d[\d\s]*)/i,
-        /Sosyal\s*Guv.enlik\s*No\s*[:\s]*(\d[\d\s]*)/i,
-        /SGK\s*(?:No|Numara)?\s*[:\s]*(\d[\d\s]*)/i
-    ];
-    for(const p of sgkPats){const m=text.match(p);if(m){maf('sgk',m[1].replace(/\s/g,''));cnt++;break}}
-
-    // Cinsiyet
-    if(/erkek/i.test(n)){msaf('cin','Erkek');cnt++}
-    else if(/kad[ıi]n/i.test(n)||/kadin/i.test(n)){msaf('cin','Kadın');cnt++}
-
-    if(cnt>0){toast(`${cnt} alan otomatik dolduruldu. Lütfen kontrol edin.`,'suc');upStep(2)}
-    else toast('Bilgi çıkarılamadı. Metni kontrol edin veya manuel girin.','wrn');
-}
-
-/* ====== RAPOR PARSE ====== */
-function processReportText(text){
-    let cnt=0;
-    const n=norm(text);
-
-    // Rapor bulgularını textarea'a yaz
-    // Bulgular genelde "BULGULAR:" veya son kısımda olur
-    const bulguPats=[
-        /(?:BULGULAR?|Sonu[cç]|A[cç]ıklama|Rapor)\s*[:\-]\s*([\s\S]*?)(?:SONU[ÇC]|KOD|TAHRİK|$)/i,
-        /(?:BULGULAR?|Sonu[cç])\s*[:\-]\s*([\s\S]*?)$/i
-    ];
-    let bulguText='';
-    for(const p of bulguPats){const m=text.match(p);if(m){bulguText=m[1].trim();break}}
-    if(!bulguText){
-        // Tüm metni bulgu olarak al ama hasta başlık kısmını çıkar
-        const cleaned=text.replace(/(?:TC\s*Kimlik|Kimlik\s*No|Ad[ıi]|Soyad[ıi]|Doğum|Yaş|Cinsiyet|Baba|SGK|Sosyal)[^\n]*/gi,'').trim();
-        bulguText=cleaned;
-    }
-    if(bulguText){$('bulgu').value=bulguText;$('bulgu').classList.add('af');cnt++}
-
-    // DVT Sonucu
-    const pozPats=/tromboflebit|trombo[zs]\b|thrombos[ei]s|dvt\b|ven[öo]z\s*trombo|deep\s*vein\s*thrombosis|trombus|pıht[ıi]/i;
-    const negPats=/trombo[zs]\s*(?:bulunmamakt|yok|g[oö]rülmed|tespit\s*edilmed|saptanmam[ıi])/i;
-    const isPoz=pozPats.test(text);
-    const isNeg=negPats.test(text);
-
-    if(isPoz&&!isNeg){msaf('dvt','Pozitif');cnt++}
-    else if(isNeg){msaf('dvt','Negatif');cnt++}
-    else if(/normal/i.test(n)&&!isPoz){msaf('dvt','Negatif');cnt++}
-
-    // Taraf
-    const isSol=/(?:sol)\s*(?:alt|üst)?\s*(?:ekstremite|bacak|taraf|extrem|ven)/i.test(text)||(/\bsol\b/i.test(text)&&/ekstremite|bacak|ven|doppler|ultrason/i.test(text));
-    const isSag=/(?:s[ağg])\s*(?:alt|üst)?\s*(?:ekstremite|bacak|taraf|extrem|ven)/i.test(text)||(/\bs[ağg]\b/i.test(text)&&/ekstremite|bacak|ven|doppler|ultrason/i.test(text));
-    const isBil=/bilateral|iki\s*taraf|[cç]ift\s*taraf/i.test(n);
-
-    if(isBil){msaf('tar','Bilateral');cnt++}
-    else if(isSol&&isSag){msaf('tar','Bilateral');cnt++}
-    else if(isSol){msaf('tar','Sol');cnt++}
-    else if(isSag){msaf('tar','Sağ');cnt++}
-
-    // Lokalizasyon
-    const isProx=/proksimal/i.test(n);
-    const isDist=/distal/i.test(n);
-    if(isProx&&isDist){msaf('lok','Proksimal + Distal');cnt++}
-    else if(isProx){msaf('lok','Proksimal');cnt++}
-    else if(isDist){msaf('lok','Distal');cnt++}
-
-    // Rapor içinde hasta bilgisi de varsa doldur (eğer boşsa)
-    if(!$('tc').value){const m=text.match(/(?:TC\s*)?Kimlik\s*No\s*[:\s]*(\d{11})/i);if(m){maf('tc',m[1]);cnt++}}
-    if(!$('ad').value){
-        const m=text.match(/(?:Ad[ıi]\s*:\s*([A-ZÇĞİÖŞÜa-zçğıöşü]+)\s*Soyad[ıi]\s*:\s*([A-ZÇĞİÖŞÜa-zçğıöşü]+))/i);
-        if(m){maf('ad',m[1].trim()+' '+m[2].trim());cnt++}
-    }
-
-    if(cnt>0){toast(`${cnt} rapor alanı dolduruldu. Kontrol edin.`,'suc');upStep(2)}
-    else toast('Rapor bilgisi çıkarılamadı. Metni kontrol edin.','wrn');
-}
-
-/* ====== LABORATUVAR PARSE ====== */
-function processLabText(text){
-    let cnt=0;
-    const n=norm(text);
-
-    // Her laboratuvar parametresi için çoklu kalıp
-    const labPats={
-        hb:[
-            /H[bg]\s*[:\s]*(\d+[.,]\d+)/i,
-            /Hemoglobin\s*[:\s]*(\d+[.,]\d+)/i,
-            /H[bg]\s*\(.*?\)\s*[:\s]*(\d+[.,]\d+)/i
-        ],
-        ua:[
-            /[Uu]rik\s*Asit\s*[:\s]*(\d+[.,]\d+)/i,
-            /Uric\s*Acid\s*[:\s]*(\d+[.,]\d+)/i,
-            /[Uu]A\s*[:\s]*(\d+[.,]\d+)/i
-        ],
-        alb:[
-            /Alb.u.m[iin]\s*[:\s]*(\d+[.,]\d+)/i,
-            /Albumin\s*[:\s]*(\d+[.,]\d+)/i,
-            /ALB\s*[:\s]*(\d+[.,]\d+)/i
-        ],
-        tp:[
-            /Total\s*Protein\s*[:\s]*(\d+[.,]\d+)/i,
-            /Toplam\s*Protein\s*[:\s]*(\d+[.,]\d+)/i,
-            /T\.?\s*Protein\s*[:\s]*(\d+[.,]\d+)/i
-        ],
-        trp:[
-            /Trombosit\s*[:\s]*(\d+)/i,
-            /PLT\s*[:\s]*(\d+)/i,
-            /Platelet\s*[:\s]*(\d+)/i
-        ],
-        dd:[
-            /D[\-\s]*Dimer\s*[:\s]*(\d+[.,]\d+)/i,
-            /D-Dimer\s*[:\s]*(\d+[.,]\d+)/i,
-            /D.dimer\s*[:\s]*(\d+[.,]\d+)/i
-        ],
-        inr:[
-            /INR\s*[:\s]*(\d+[.,]\d+)/i,
-            /\bINR\b\s*(\d+[.,]\d+)/i
-        ],
-        aptt:[
-            /APTT\s*[:\s]*(\d+[.,]\d+)/i,
-            /aPTT\s*[:\s]*(\d+[.,]\d+)/i,
-            /Aktif\s*Partial\s*[:\s]*(\d+[.,]\d+)/i
-        ]
-    };
-
-    const fieldMap={hb:'hb',ua:'ua',alb:'alb',tp:'tp',trp:'trp',dd:'dd',inr:'inr',aptt:'aptt'};
-
-    for(const [key,pats] of Object.entries(labPats)){
-        if($(fieldMap[key]).value) continue; // Zaten doluysa atla
-        for(const p of pats){
-            const m=text.match(p);
-            if(m){
-                // Virgülü noktaya çevir
-                const val=m[1].replace(',','.');
-                maf(fieldMap[key],val);
-                cnt++;
-                break;
-            }
-        }
-    }
-
-    if(cnt>0){toast(`${cnt} laboratuvar değeri dolduruldu. Kontrol edin.`,'suc');upStep(3)}
-    else toast('Laboratuvar değeri çıkarılamadı. Metni kontrol edin.','wrn');
-}
-
-/* ====== DURUM GÜNCELLEME ====== */
-function upStep(step){
-    if(step>curStep)curStep=step;
-    document.querySelectorAll('#sts .st-i').forEach(item=>{
-        const s=+item.dataset.s;
-        item.classList.remove('act','done');
-        if(s<curStep){item.classList.add('done');item.querySelector('.st-c').innerHTML='<i class="fa-solid fa-check" style="font-size:12px"></i>'}
-        else if(s===curStep) item.classList.add('act');
-    });
-}
-
-/* Form dinleyicileri */
-function attachListeners(){
-    ['tc','ad'].forEach(id=>$(id).addEventListener('input',()=>{if($('tc').value||$('ad').value)upStep(2)}));
-    ['dvt','lok','tar'].forEach(id=>$(id).addEventListener('change',()=>{if($('dvt').value)upStep(2)}));
-    ['hb','ua','alb','tp','trp','dd','inr','aptt'].forEach(id=>$(id).addEventListener('input',()=>{upStep(3)}));
-}
-
-/* ====== KAYDET ====== */
-function savePatient(){
-    const ad=$('ad').value.trim();
-    if(!ad&&!$('tc').value.trim()){toast('En az Ad Soyad veya TC Kimlik girilmelidir.','err');return}
-
-    patients.push({
-        no:pidCtr++,
-        tc:$('tc').value.trim(),
-        ad:ad||'Bilinmeyen',
-        yas:$('yas').value,
-        cin:$('cin').value,
-        baba:$('baba').value.trim(),
-        dtar:$('dtar').value.trim(),
-        sgk:$('sgk').value.trim(),
-        ktar:$('ktar').value||new Date().toISOString().split('T')[0],
-        dvt:$('dvt').value,
-        lok:$('lok').value,
-        tar:$('tar').value,
-        bulgu:$('bulgu').value.trim(),
-        hb:$('hb').value,
-        ua:$('ua').value,
-        alb:$('alb').value,
-        tp:$('tp').value,
-        trp:$('trp').value,
-        dd:$('dd').value,
-        inr:$('inr').value,
-        aptt:$('aptt').value
-    });
-
-    renderList();updateStats();clearForm();upStep(4);
-    toast(`${ad||'Hasta'} başarıyla kaydedildi.`,'suc');
-}
-
-/* ====== TEMİZLE ====== */
-function clearForm(){
-    ['tc','ad','yas','baba','dtar','sgk','hb','ua','alb','tp','trp','dd','inr','aptt'].forEach(id=>{const e=$(id);e.value='';e.classList.remove('af')});
-    ['cin','dvt','lok','tar'].forEach(id=>{const e=$(id);e.value='';e.classList.remove('af')});
-    $('bulgu').value='';$('bulgu').classList.remove('af');
-    $('ktar').value=new Date().toISOString().split('T')[0];
-    curStep=1;
-    document.querySelectorAll('#sts .st-i').forEach((item,i)=>{
-        item.classList.remove('act','done');
-        item.querySelector('.st-c').innerHTML=`<i class="fa-solid fa-${i+1}" style="font-size:11px"></i>`;
-    });
-    document.querySelector('#sts .st-i[data-s="1"]').classList.add('act');
-}
-
-/* ====== LİSTE ====== */
-function renderList(){
-    const c=$('pl'),l=$('pcl'),h=$('hc'),b=$('exBtn');
-    l.textContent=patients.length+' kayıt';h.textContent=patients.length;b.disabled=!patients.length;
-    if(!patients.length){c.innerHTML='<div style="text-align:center;padding:30px 20px;color:var(--text-m)"><i class="fa-solid fa-inbox" style="font-size:28px;margin-bottom:8px;display:block;opacity:.4"></i><p style="font-size:13px">Henüz kayıtlı hasta yok</p></div>';return}
-    c.innerHTML=patients.map((p,i)=>`
-        <div class="pi" onclick="loadP(${i})">
-            <div style="display:flex;align-items:center;gap:10px;min-width:0">
-                <div style="width:32px;height:32px;border-radius:8px;background:${p.dvt==='Pozitif'?'var(--danger-g)':'rgba(0,230,118,0.08)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="fa-solid fa-user" style="font-size:12px;color:${p.dvt==='Pozitif'?'var(--danger)':'var(--accent)'}"></i>
-                </div>
-                <div style="min-width:0">
-                    <p style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.ad}</p>
-                    <p style="font-size:11px;color:var(--text-m)">${p.tar||'?'} ${p.dvt?'· '+p.dvt:''} ${p.dd?'· DD:'+p.dd:''}</p>
-                </div>
-            </div>
-            <div class="db" onclick="event.stopPropagation();delP(${i})" title="Sil"><i class="fa-solid fa-trash-can" style="font-size:12px"></i></div>
-        </div>`).join('');
-}
-
-function delP(i){const n=patients[i].ad;patients.splice(i,1);renderList();updateStats();toast(n+' silindi.','inf')}
-function loadP(i){
-    const p=patients[i];
-    maf('tc',p.tc);maf('ad',p.ad);maf('yas',p.yas);maf('baba',p.baba);maf('dtar',p.dtar);maf('sgk',p.sgk);
-    $('ktar').value=p.ktar;
-    msaf('cin',p.cin);msaf('dvt',p.dvt);msaf('lok',p.lok);msaf('tar',p.tar);
-    maf('hb',p.hb);maf('ua',p.ua);maf('alb',p.alb);maf('tp',p.tp);maf('trp',p.trp);maf('dd',p.dd);maf('inr',p.inr);maf('aptt',p.aptt);
-    $('bulgu').value=p.bulgu;if(p.bulgu)$('bulgu').classList.add('af');
-    patients.splice(i,1);renderList();updateStats();upStep(4);
-    toast(p.ad+' form yüklendi. Düzenleyip kaydedin.','inf');
-}
-
-function updateStats(){
-    $('sp').textContent=patients.filter(p=>p.dvt==='Pozitif').length;
-    $('sn').textContent=patients.filter(p=>p.dvt==='Negatif').length;
-}
-
-/* ====== EXCEL ====== */
-function exportToExcel(){
-    if(!patients.length){toast('Aktarılacak kayıt yok','wrn');return}
-    const data=patients.map(p=>({
-        'TC Kimlik':p.tc,'Ad Soyad':p.ad,'Yaş':p.yas||'','Cinsiyet':p.cin||'','Baba Adı':p.baba,
-        'Doğum Tarihi':p.dtar,'SGK No':p.sgk,'Kayıt Tarihi':p.ktar,
-        'DVT Sonucu':p.dvt||'','Lokalizasyon':p.lok||'','Taraf':p.tar||'',
-        'Rapor Bulguları':p.bulgu,
-        'Hb (g/dL)':p.hb||'','Ürik Asit (mg/dL)':p.ua||'','Albümin (g/dL)':p.alb||'',
-        'Total Protein (g/dL)':p.tp||'','Trombosit (10³/µL)':p.trp||'',
-        'D-Dimer (µg/mL FEU)':p.dd||'','INR':p.inr||'','APTT (sn)':p.aptt||''
-    });
-    try{
-        const ws=XLSX.utils.json_to_sheet(data);
-        ws['!cols']=[
-            {wch:14},{wch:24},{wch:6},{wch:10},{wch:16},{wch:14},{wch:16},{wch:14},
-            {wch:12},{wch:20},{wch:12},{wch:40},
-            {wch:12},{wch:18},{wch:14},{wch:18},{wch:16},{wch:20},{wch:8},{wch:10}
-        ];
-        const wb=XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb,ws,'Hasta Verileri');
-        const now=new Date();
-        const ds=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-        XLSX.writeFile(wb,`HBYS_Verileri_${ds}.xlsx`);
-        upStep(5);
-        toast(patients.length+' hasta Excel\'e aktarıldı.','suc',4000);
-    }catch(e){console.error(e);toast('Excel aktarımı başarısız: '+e.message,'err')}
-}
-
-/* ====== KISAYOL ====== */
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();savePatient()}});
-
-/* ====== BAŞLAT ====== */
-document.addEventListener('DOMContentLoaded',()=>{
-    $('ktar').value=new Date().toISOString().split('T')[0];
-    attachListeners();upStep(1);
-});
-</script>
+            // İlk durumu ayarla
+            updateStatus(1);
+        });
+    </script>
 </body>
 </html>
