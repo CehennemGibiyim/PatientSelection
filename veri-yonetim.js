@@ -35,12 +35,14 @@ class DataManagement {
     exportToExcel(patients) {
         try {
             const excelData = patients.map(p => ({
-                'Hasta ID': p.hastaId || '',
                 'TC Kimlik': p.tcKimlik || '',
+                'Ad': p.ad || '',
+                'Soyad': p.soyad || '',
                 'Ad Soyad': p.adSoyad || '',
                 'Yaş': p.yas || '',
                 'Cinsiyet': p.cinsiyet || '',
                 'Baba Adı': p.babaAdi || '',
+                'Anne Adı': p.anneAdi || '',
                 'Doğum Tarihi': p.dogumTarihi || '',
                 'SGK No': p.sgkNo || '',
                 'Kayıt Tarihi': p.kayitTarihi || '',
@@ -65,11 +67,10 @@ class DataManagement {
             
             // Sütun genişlikleri ayarla
             ws['!cols'] = [
-                { wch: 12 }, { wch: 14 }, { wch: 22 }, { wch: 6 }, { wch: 10 },
-                { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 12 },
-                { wch: 20 }, { wch: 12 }, { wch: 12 }, { wch: 18 }, { wch: 14 },
-                { wch: 18 }, { wch: 18 }, { wch: 20 }, { wch: 8 }, { wch: 12 },
-                { wch: 16 }, { wch: 18 }, { wch: 12 }, { wch: 20 }
+                { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 24 }, { wch: 6 },
+                { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 14 },
+                { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
+                { wch: 18 }, { wch: 10 }, { wch: 10 }, { wch: 10 }
             ];
 
             const wb = XLSX.utils.book_new();
@@ -122,7 +123,7 @@ class DataManagement {
     exportToCSV(patients) {
         try {
             const headers = [
-                'Hasta ID', 'TC Kimlik', 'Ad Soyad', 'Yaş', 'Cinsiyet', 'Baba Adı',
+                'TC Kimlik', 'Ad', 'Soyad', 'Ad Soyad', 'Yaş', 'Cinsiyet', 'Baba Adı', 'Anne Adı',
                 'Doğum Tarihi', 'SGK No', 'Kayıt Tarihi', 'DVT Sonucu', 'Lokalizasyon',
                 'Taraf', 'Hb (g/dL)', 'Urik Asit (mg/dL)', 'Albumin (g/dL)',
                 'Total Protein (g/dL)', 'Trombosit (10^3/uL)', 'D-Dimer (ug/mL FEU)',
@@ -133,12 +134,14 @@ class DataManagement {
             const csvContent = [
                 headers.join(','),
                 ...patients.map(p => [
-                    `"${p.hastaId || ''}"`,
                     `"${p.tcKimlik || ''}"`,
+                    `"${p.ad || ''}"`,
+                    `"${p.soyad || ''}"`,
                     `"${p.adSoyad || ''}"`,
                     `"${p.yas || ''}"`,
                     `"${p.cinsiyet || ''}"`,
                     `"${p.babaAdi || ''}"`,
+                    `"${p.anneAdi || ''}"`,
                     `"${p.dogumTarihi || ''}"`,
                     `"${p.sgkNo || ''}"`,
                     `"${p.kayitTarihi || ''}"`,
