@@ -1198,6 +1198,11 @@
                 updateOcrProgress(0.95, 'Bilgiler cikartiliyor...');
                 await new Promise(r => setTimeout(r, 300));
 
+                // DEBUG: OCR text'ini konsola yaz
+                console.log('=== HASTA OCR METNI ===');
+                console.log(text);
+                console.log('=======================');
+
                 const normalized = normalizeTurkish(text);
                 let filledCount = 0;
 
@@ -1220,7 +1225,7 @@
                 // SOYAD (soyisim) - ayrı field olarak - GELIŞMIŞ PATTERNLER
                 const soyadiMatch = text.match(/Soyad[ıiIİ][:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i)
                     || text.match(/Soyad[ıi][:\s]+([A-ZÇĞİÖŞÜ]+)/i)
-                    || text.match(/Soyad[ıi][:\s\t]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]*)/i)
+                    || text.match(/Soyad[ıi][:\s\t]+([A-ZÇĞİÖŞÜ]+)/i)
                     || text.match(/Soyad[ıi]\s*:\s*([A-ZÇĞİÖŞÜ][^\s\d]+)/i)
                     || text.match(/\bSoyad\s+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\b/i)
                     || text.match(/Surname[:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i);
@@ -1287,22 +1292,46 @@
                     if (age && age > 0) { markAutoFilled('yas', age.toString()); filledCount++; }
                 }
 
-                // SGK No - GELIŞMIŞ PATTERNLER
-                let sgkMatch = text.match(/Sosyal\s*G[üu]venlik\s*No[.:\s]*(\d{3,})/i)
-                    || text.match(/SGK\s*No[.:\s]*(\d{3,})/i)
-                    || text.match(/Sosyal\s*G[üu]venlik[.:\s]*(\d{3,})/i)
-                    || text.match(/SGK[.:\s]*(\d{3,})/i)
-                    || text.match(/Sigorta\s*No[.:\s]*(\d{3,})/i)
-                    || text.match(/S\.?G\.?K\.?[.:\s]*(\d{3,})/i)
-                    || text.match(/G[üu]venlik\s*No[.:\s]*(\d{3,})/i);
+                // SGK No - COK DAHA GELIŞMIŞ PATTERNLER
+                let sgkMatch = null;
+                let sgkPatterns = [
+                    /Sosyal\s*G[üuüÜ]venlik\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /SGK\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /Sosyal\s*G[üuüÜ]venlik[.:\s]*(\d[\d\s]*)/i,
+                    /SGK[.:\s]*(\d[\d\s]*)/i,
+                    /Sigorta\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /S\.?G\.?K\.?[.:\s]*(\d[\d\s]*)/i,
+                    /G[üuüÜ]venlik\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /Medula\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /Kurum\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /S\s*G\s*K\s*[:\s]*(\d[\d\s]*)/i,
+                    /Sosyal\s*Guv[.:\s]*(\d[\d\s]*)/i,
+                    /Sgk\s*[:\s]*(\d[\d\s]*)/i
+                ];
+                
+                for (let pattern of sgkPatterns) {
+                    sgkMatch = text.match(pattern);
+                    if (sgkMatch) {
+                        console.log('SGK pattern match:', pattern, '->', sgkMatch[1]);
+                        break;
+                    }
+                }
+                
                 // Sayıyı temizle ve kaydet
                 if (sgkMatch) {
-                    const sgkNo = sgkMatch[1].replace(/\D/g, ''); // Sadece rakamları al
-                    if (sgkNo.length >= 3) {
+                    const sgkRaw = sgkMatch[1];
+                    const sgkNo = sgkRaw.replace(/\D/g, ''); // Sadece rakamları al
+                    console.log('SGK Ham:', sgkRaw, '-> Temiz:', sgkNo);
+                    
+                    if (sgkNo.length >= 6) {
                         markAutoFilled('sgkNo', sgkNo);
                         filledCount++;
-                        console.log('SGK No bulundu:', sgkNo);
+                        console.log('✓ SGK No formda dolduruldu:', sgkNo);
+                    } else {
+                        console.log('✗ SGK No çok kısa:', sgkNo);
                     }
+                } else {
+                    console.log('✗ Hiçbir SGK pattern match olmadı');
                 }
 
                 // Cinsiyet
@@ -1577,6 +1606,11 @@
         
         // Lab değerlerini metinden çıkar
         function extractLabValuesFromText(text, extractedValues) {
+            console.log('=== LAB OCR METNI (ilk 500 karakter) ===');
+            console.log(text.substring(0, 500));
+            console.log('...');
+            console.log('======================================');
+            
             const lines = text.split('\n');
             
             // Tüm olası lab pattern'leri
