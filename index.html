@@ -843,7 +843,7 @@
 
                     <!-- Aksiyon Butonları -->
                     <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                        <button class="btn btn-primary" onclick="savePatient()" style="flex:1; min-width:160px;">
+                        <button class="btn btn-primary" onclick="enhancedSavePatient()" style="flex:1; min-width:160px;">
                             <i class="fa-solid fa-floppy-disk"></i> Kaydet
                         </button>
                         <button class="btn btn-danger" onclick="clearForm()" style="min-width:120px;">
@@ -1123,13 +1123,13 @@
 
                 // Adı
                 const adiMatch = text.match(/Ad[iı][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Soyad[ıi]|Baba|Doğum|Cinsiyet|Kimlik|$))/i)
-                    || text.match(/Ad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
+                    || text.match(/Ad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
                 if (adiMatch) {
                     const adi = adiMatch[1].trim();
                     if (adi.length > 1) {
                         // Soyadı da ayrı var mı kontrol et
                         const soyadiMatch = text.match(/Soyad[ıi][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|Ad[iı]|$))/i)
-                            || text.match(/Soyad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
+                            || text.match(/Soyad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
                         const soyadi = soyadiMatch ? soyadiMatch[1].trim() : '';
                         const full = soyadi ? `${adi} ${soyadi}` : adi;
                         markAutoFilled('adSoyad', full);
@@ -1351,7 +1351,7 @@
                     if (sgkMatch) { markAutoFilled('sgkNo', sgkMatch[1]); filledCount++; }
 
                     if (filledCount > 0) {
-                        showToast(`Panodan ${filledCount} alan dolduruldu.`, 'success');
+                        showToast(`${filledCount} alan otomatik dolduruldu. Lutfen kontrol edin.`, 'success');
                         updateStatus(2);
                     } else {
                         showToast('Panodan bilgi cikartilamadi. Farkli bir metin deneyin.', 'warning');
@@ -1393,10 +1393,44 @@
                     }
 
                     if (filledCount > 0) {
-                        showToast(`Panodan ${filledCount} rapor alani dolduruldu.`, 'success');
+                        showToast(`${filledCount>0?filledCount:''} rapor alani otomatik dolduruldu. Lutfen kontrol edin.`, 'success');
                         updateStatus(3);
                     } else {
                         showToast('Panodan rapor bilgisi cikartilamadi.', 'warning');
+                    }
+                } else if (type === 'laboratory') {
+                    // Laboratuvar sonucu metnini parse et
+                    let filledCount = 0;
+
+                    const hbMatch = text.match(/Hb[:\s]*(\d+\.?\d*)/i) || text.match(/Hemoglobin[:\s]*(\d+\.?\d*)/i);
+                    if (hbMatch) { markAutoFilled('hb', hbMatch[1]); filledCount++; }
+
+                    const dDimerMatch = text.match(/D-?Dimer[:\s]*(\d+\.?\d*)/i) || text.match(/D\.?Dimer[:\s]*(\d+\.?\d*)/i);
+                    if (dDimerMatch) { markAutoFilled('dDimer', dDimerMatch[1]); filledCount++; }
+
+                    const inrMatch = text.match(/INR[:\s]*(\d+\.?\d*)/i);
+                    if (inrMatch) { markAutoFilled('inr', inrMatch[1]); filledCount++; }
+
+                    const apttMatch = text.match(/APTT[:\s]*(\d+\.?\d*)/i) || text.match(/aPTT[:\s]*(\d+\.?\d*)/i);
+                    if (apttMatch) { markAutoFilled('aptt', apttMatch[1]); filledCount++; }
+
+                    const trombositMatch = text.match(/Trombosit[:\s]*(\d+)/i) || text.match(/Platelet[:\s]*(\d+)/i);
+                    if (trombositMatch) { markAutoFilled('trombosit', trombositMatch[1]); filledCount++; }
+
+                    const urikAsitMatch = text.match(/Urik\s*Asit[:\s]*(\d+\.?\d*)/i) || text.match(/Uric\s*Acid[:\s]*(\d+\.?\d*)/i);
+                    if (urikAsitMatch) { markAutoFilled('urikAsit', urikAsitMatch[1]); filledCount++; }
+
+                    const albuminMatch = text.match(/Albumin[:\s]*(\d+\.?\d*)/i);
+                    if (albuminMatch) { markAutoFilled('albumin', albuminMatch[1]); filledCount++; }
+
+                    const totalProteinMatch = text.match(/Total\s*Protein[:\s]*(\d+\.?\d*)/i);
+                    if (totalProteinMatch) { markAutoFilled('totalProtein', totalProteinMatch[1]); filledCount++; }
+
+                    if (filledCount > 0) {
+                        showToast(`Panodan ${filledCount} laboratuvar alani dolduruldu.`, 'success');
+                        updateStatus(4);
+                    } else {
+                        showToast('Panodan laboratuvar bilgisi cikartilamadi.', 'warning');
                     }
                 }
             } catch (err) {
@@ -1638,15 +1672,16 @@
         /* ===================================================
            Dosya Yükleme Event Listener'ları
         =================================================== */
-        document.getElementById('patientImageInput').addEventListener('change', function(e) {
+        document.getElementById('patientFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                showToast('Hasta bilgisi icin gorsel dosya secin (PNG, JPG).', 'error');
+            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+
+                showToast('Hasta bilgisi icin PDF veya gorsel dosya secin.', 'error');
                 return;
             }
             processPatientImage(file);
-            this.value = ''; // Aynı dosyayı tekrar yükleyebilmek için sıfırla
+            this.value = '';
         });
 
         document.getElementById('reportFileInput').addEventListener('change', function(e) {
@@ -1681,8 +1716,8 @@
                 }
             });
         }
-        setupDragDrop('patientUploadZone', 'patientImageInput');
         setupDragDrop('reportUploadZone', 'reportFileInput');
+        setupDragDrop('patientUploadZone', 'patientFileInput');
 
         /* ===================================================
            Keyboard Shortcut — Ctrl+S ile kaydet
@@ -1690,7 +1725,8 @@
         document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault();
-                savePatient();
+                if (typeof enhancedSavePatient === 'function') enhancedSavePatient();
+                else savePatient();
             }
         });
 
@@ -1708,5 +1744,10 @@
             updateStatus(1);
         });
     </script>
+    <script src="enhancements.js"></script>
+    <script src="storage-manager.js"></script>
+    <script src="mobile-responsive.js"></script>
+    <script src="veri-yonetim.js"></script>
 </body>
+
 </html>
