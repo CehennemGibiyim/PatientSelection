@@ -676,10 +676,6 @@
                         </div>
                         <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
                             <div>
-                                <label class="field-label" for="hastaId">Hasta ID</label>
-                                <input type="text" class="input-field" id="hastaId" placeholder="Otomatik">
-                            </div>
-                            <div>
                                 <label class="field-label" for="tcKimlik">TC Kimlik</label>
                                 <input type="text" class="input-field" id="tcKimlik" placeholder="11 haneli TC" maxlength="11">
                             </div>
@@ -1221,13 +1217,17 @@
                     filledCount++;
                 }
 
-                // SOYAD (soyisim) - ayrı field olarak
-                const soyadiMatch = text.match(/\bSoyad[iııİ][: \t]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\b/)
-                    || text.match(/Soyad[iı][:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)(?=\s|$)/i)
-                    || text.match(/Soyadı[:\s]+([A-ZÇĞİÖŞÜ]+)(?=\s|$)/);
-                if (soyadiMatch) {
+                // SOYAD (soyisim) - ayrı field olarak - GELIŞMIŞ PATTERNLER
+                const soyadiMatch = text.match(/Soyad[ıiIİ][:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i)
+                    || text.match(/Soyad[ıi][:\s]+([A-ZÇĞİÖŞÜ]+)/i)
+                    || text.match(/Soyad[ıi][:\s\t]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]*)/i)
+                    || text.match(/Soyad[ıi]\s*:\s*([A-ZÇĞİÖŞÜ][^\s\d]+)/i)
+                    || text.match(/\bSoyad\s+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\b/i)
+                    || text.match(/Surname[:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i);
+                if (soyadiMatch && soyadiMatch[1].length > 1) {
                     markAutoFilled('soyad', soyadiMatch[1].trim());
                     filledCount++;
+                    console.log('Soyad bulundu:', soyadiMatch[1].trim());
                 }
 
                 // Eğer Ad ve Soyad ayrı bulunduysa, adSoyad field'ini de doldur
@@ -1258,13 +1258,21 @@
                     filledCount++;
                 }
 
-                // ANNE ADI - YENI
-                const anneMatch = text.match(/\bAnne\s*Ad[iııİ][: \t]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\b/i)
-                    || text.match(/Anne\s*Ad[iı][: \t]+([A-ZÇĞİÖŞÜ]+)(?=\s|$)/i)
-                    || text.match(/Anne[: \t]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)(?=\s|Baba|Doğum)/i);
+                // ANNE ADI - GELIŞMIŞ PATTERNLER
+                const anneMatch = text.match(/Anne\s*Ad[ıiIİ][:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i)
+                    || text.match(/Anne[ıi][:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i)
+                    || text.match(/Anne\s*Ad[ıi][:\s\t]+([A-ZÇĞİÖŞÜ]+)/i)
+                    || text.match(/Anne\s*:\s*([A-ZÇĞİÖŞÜ][^\s\d]+)/i)
+                    || text.match(/\bAnne\s+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\b(?!\s*(?:Adı|Baba))/i)
+                    || text.match(/Mother[\s\w]*[:\s]+([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)/i);
                 if (anneMatch && anneMatch[1].trim().length > 1) {
-                    markAutoFilled('anneAdi', anneMatch[1].trim());
-                    filledCount++;
+                    const anneAdi = anneMatch[1].trim();
+                    // Sadece gerçek bir isimse kaydet (sayı değil, uzunluk uygun)
+                    if (/^[A-ZÇĞİÖŞÜ][a-zçğıöşü]*$/i.test(anneAdi) && anneAdi.length > 1 && anneAdi.length < 30) {
+                        markAutoFilled('anneAdi', anneAdi);
+                        filledCount++;
+                        console.log('Anne adı bulundu:', anneAdi);
+                    }
                 }
 
                 // Doğum Tarihi
@@ -1279,13 +1287,23 @@
                     if (age && age > 0) { markAutoFilled('yas', age.toString()); filledCount++; }
                 }
 
-                // SGK No - daha geniş patternler
-                const sgkMatch = text.match(/Sosyal\s*Guvenlik\s*No[:\s]*(\d+)/i)
-                    || text.match(/SGK\s*No[:\s]*(\d+)/i)
-                    || text.match(/Sosyal\s*Guvenlik[:\s]*(\d+)/i)
-                    || text.match(/SGK[:\s]*(\d+)/i)
-                    || text.match(/Sigorta\s*No[:\s]*(\d+)/i);
-                if (sgkMatch) { markAutoFilled('sgkNo', sgkMatch[1]); filledCount++; }
+                // SGK No - GELIŞMIŞ PATTERNLER
+                let sgkMatch = text.match(/Sosyal\s*G[üu]venlik\s*No[.:\s]*(\d{3,})/i)
+                    || text.match(/SGK\s*No[.:\s]*(\d{3,})/i)
+                    || text.match(/Sosyal\s*G[üu]venlik[.:\s]*(\d{3,})/i)
+                    || text.match(/SGK[.:\s]*(\d{3,})/i)
+                    || text.match(/Sigorta\s*No[.:\s]*(\d{3,})/i)
+                    || text.match(/S\.?G\.?K\.?[.:\s]*(\d{3,})/i)
+                    || text.match(/G[üu]venlik\s*No[.:\s]*(\d{3,})/i);
+                // Sayıyı temizle ve kaydet
+                if (sgkMatch) {
+                    const sgkNo = sgkMatch[1].replace(/\D/g, ''); // Sadece rakamları al
+                    if (sgkNo.length >= 3) {
+                        markAutoFilled('sgkNo', sgkNo);
+                        filledCount++;
+                        console.log('SGK No bulundu:', sgkNo);
+                    }
+                }
 
                 // Cinsiyet
                 if (/erkek/i.test(normalized)) { markSelectAutoFilled('cinsiyet', 'Erkek'); filledCount++; }
@@ -1939,7 +1957,6 @@
 
             const patient = {
                 id: patientIdCounter++,
-                hastaId: document.getElementById('hastaId').value || `HST-${String(patientIdCounter - 1).padStart(4, '0')}`,
                 tcKimlik: document.getElementById('tcKimlik').value.trim(),
                 ad: ad,
                 soyad: soyad,
@@ -1995,7 +2012,7 @@
            Form Temizle
         =================================================== */
         function clearForm() {
-            const fieldIds = ['hastaId', 'tcKimlik', 'ad', 'soyad', 'adSoyad', 'yas', 'babaAdi', 'anneAdi', 'dogumTarihi', 'sgkNo',
+            const fieldIds = ['tcKimlik', 'ad', 'soyad', 'adSoyad', 'yas', 'babaAdi', 'anneAdi', 'dogumTarihi', 'sgkNo',
                 'hb', 'urikAsit', 'albumin', 'totalProtein', 'trombosit', 'dDimer', 'inr', 'aptt',
                 'kreatinin', 'glukoz', 'crp', 'ast', 'alt', 'kolesterol', 'hdl', 'ldl', 'trigliserit',
                 'tsh', 't4', 'wbc', 'rbc', 'hct', 'kalsiyum', 'sodyum', 'potasyum', 'troponin', 'bnp'];
@@ -2080,7 +2097,6 @@
         =================================================== */
         function loadPatientToForm(index) {
             const p = patients[index];
-            markAutoFilled('hastaId', p.hastaId);
             markAutoFilled('tcKimlik', p.tcKimlik);
             markAutoFilled('ad', p.ad);
             markAutoFilled('soyad', p.soyad);
@@ -2152,7 +2168,6 @@
 
             // Excel verisini hazırla
             const excelData = patients.map(p => ({
-                'Hasta ID': p.hastaId,
                 'TC Kimlik': p.tcKimlik,
                 'Ad': p.ad || '',
                 'Soyad': p.soyad || '',
@@ -2199,12 +2214,12 @@
             try {
                 const ws = XLSX.utils.json_to_sheet(excelData);
 
-                // Sütun genişliklerini ayarla
+                // Sütun genişliklerini ayarla (TC, Ad, Soyad, Ad Soyad, Yas, Cinsiyet, Baba, Anne, Dogum, SGK, Kayit, DVT, Lok, Taraf, ...)
                 ws['!cols'] = [
-                    { wch: 12 }, { wch: 14 }, { wch: 22 }, { wch: 6 }, { wch: 10 },
-                    { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 12 },
-                    { wch: 20 }, { wch: 12 }, { wch: 12 }, { wch: 18 }, { wch: 14 },
-                    { wch: 18 }, { wch: 18 }, { wch: 20 }, { wch: 8 }, { wch: 12 }
+                    { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 24 }, { wch: 6 },
+                    { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 14 },
+                    { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
+                    { wch: 18 }, { wch: 10 }, { wch: 10 }, { wch: 10 }
                 ];
 
                 const wb = XLSX.utils.book_new();
