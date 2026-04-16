@@ -590,35 +590,81 @@
                 <!-- Sol Sütun -->
                 <div style="display:flex; flex-direction:column; gap:20px;">
 
-                    <!-- Dosya Yükleme Kartı -->
+                    <!-- Dosya İşleme Paneli -->
                     <div class="card" style="padding:20px;">
                         <div class="section-title">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <span>Otomatik Veri Yukleme</span>
+                            <i class="fa-solid fa-file-processing"></i>
+                            <span>Belge İşleme Merkezi</span>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                            <!-- Hasta Bilgi Ekran Görüntüsü -->
+                        
+                        <!-- Sekmeler -->
+                        <div style="display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--border);">
+                            <button class="tab-btn active" onclick="switchTab('patient')" data-tab="patient" style="padding:10px 16px; border:none; background:transparent; color:var(--text); font-size:13px; font-weight:500; border-bottom:2px solid var(--accent); cursor:pointer;">
+                                <i class="fa-solid fa-user-pen" style="margin-right:6px;"></i>Hasta Bilgisi
+                            </button>
+                            <button class="tab-btn" onclick="switchTab('report')" data-tab="report" style="padding:10px 16px; border:none; background:transparent; color:var(--text-muted); font-size:13px; font-weight:500; border-bottom:2px solid transparent; cursor:pointer;">
+                                <i class="fa-solid fa-file-medical" style="margin-right:6px;"></i>Radyoloji Raporu
+                            </button>
+                            <button class="tab-btn" onclick="switchTab('laboratory')" data-tab="laboratory" style="padding:10px 16px; border:none; background:transparent; color:var(--text-muted); font-size:13px; font-weight:500; border-bottom:2px solid transparent; cursor:pointer;">
+                                <i class="fa-solid fa-flask-vial" style="margin-right:6px;"></i>Laboratuvar Sonucu
+                            </button>
+                        </div>
+                        
+                        <!-- Hasta Bilgisi Sekmesi -->
+                        <div id="patientTab" class="tab-content">
                             <div class="upload-zone" id="patientUploadZone">
-                                <input type="file" accept="image/*" id="patientImageInput" aria-label="Hasta bilgi ekran goruntusu yukle">
-                                <i class="fa-solid fa-id-card" style="font-size:24px; color:var(--text-muted); margin-bottom:8px; display:block;"></i>
-                                <p style="font-size:13px; font-weight:600; color:var(--text-secondary);">Hasta Bilgi Goruntusu</p>
-                                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">PNG, JPG — OCR ile otomatik doldurur</p>
+                                <input type="file" accept="image/*,.pdf" id="patientFileInput" aria-label="Hasta bilgi belgesi yukle">
+                                <i class="fa-solid fa-id-card" style="font-size:28px; color:var(--text-muted); margin-bottom:10px; display:block;"></i>
+                                <p style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Hasta Bilgi Belgesi</p>
+                                <p style="font-size:12px; color:var(--text-muted);">PDF, PNG, JPG — TC, Ad Soyad, Baba Adı, SGK No gibi bilgileri otomatik çıkarır</p>
+                                <button class="btn btn-secondary" style="margin-top:12px;" onclick="pasteFromClipboard('patient')">
+                                    <i class="fa-solid fa-paste"></i> Panodan Metin Yapıştır
+                                </button>
                             </div>
-                            <!-- Rapor Dosyası -->
-                            <div class="upload-zone" id="reportUploadZone">
-                                <input type="file" accept="image/*,.pdf" id="reportFileInput" aria-label="Rapor dosyasi yukle">
-                                <i class="fa-solid fa-file-medical" style="font-size:24px; color:var(--text-muted); margin-bottom:8px; display:block;"></i>
-                                <p style="font-size:13px; font-weight:600; color:var(--text-secondary);">Rapor Dosyasi</p>
-                                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">PDF, PNG, JPG — Bulgulari okur</p>
+                            <div id="patientProcessedInfo" style="margin-top:12px; display:none;">
+                                <div style="background:var(--accent-glow); border:1px solid var(--accent-dim); border-radius:8px; padding:12px;">
+                                    <p style="font-size:12px; color:var(--accent); font-weight:600; margin-bottom:6px;"><i class="fa-solid fa-check-circle" style="margin-right:4px;"></i>İşlem Tamamlandı</p>
+                                    <p id="patientProcessResult" style="font-size:11px; color:var(--text);"></p>
+                                </div>
                             </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
-                            <button class="btn btn-ghost" onclick="pasteFromClipboard('patient')" title="Panodan hasta bilgisi metni yapistirir">
-                                <i class="fa-solid fa-paste"></i> Panodan Hasta Bilgisi Al
-                            </button>
-                            <button class="btn btn-ghost" onclick="pasteFromClipboard('report')" title="Panodan radyoloji raporu metni yapistirir">
-                                <i class="fa-solid fa-paste"></i> Panodan Radyoloji Al
-                            </button>
+                        
+                        <!-- Radyoloji Raporu Sekmesi -->
+                        <div id="reportTab" class="tab-content" style="display:none;">
+                            <div class="upload-zone" id="reportUploadZone">
+                                <input type="file" accept="image/*,.pdf" id="reportFileInput" aria-label="Radyoloji raporu yukle">
+                                <i class="fa-solid fa-file-medical" style="font-size:28px; color:var(--text-muted); margin-bottom:10px; display:block;"></i>
+                                <p style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Radyoloji Raporu</p>
+                                <p style="font-size:12px; color:var(--text-muted);">PDF, PNG, JPG — DVT sonucu, lokalizasyon, taraf bilgilerini otomatik çıkarır</p>
+                                <button class="btn btn-secondary" style="margin-top:12px;" onclick="pasteFromClipboard('report')">
+                                    <i class="fa-solid fa-paste"></i> Panodan Rapor Yapıştır
+                                </button>
+                            </div>
+                            <div id="reportProcessedInfo" style="margin-top:12px; display:none;">
+                                <div style="background:var(--info-glow); border:1px solid rgba(0,176,255,0.3); border-radius:8px; padding:12px;">
+                                    <p style="font-size:12px; color:var(--info); font-weight:600; margin-bottom:6px;"><i class="fa-solid fa-check-circle" style="margin-right:4px;"></i>Rapor İşlendi</p>
+                                    <p id="reportProcessResult" style="font-size:11px; color:var(--text);"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Laboratuvar Sonucu Sekmesi -->
+                        <div id="laboratoryTab" class="tab-content" style="display:none;">
+                            <div class="upload-zone" id="labUploadZone">
+                                <input type="file" accept="image/*,.pdf" id="labFileInput" aria-label="Laboratuvar sonucu yukle">
+                                <i class="fa-solid fa-flask-vial" style="font-size:28px; color:var(--text-muted); margin-bottom:10px; display:block;"></i>
+                                <p style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Laboratuvar Sonucu</p>
+                                <p style="font-size:12px; color:var(--text-muted);">PDF, PNG, JPG — Hb, D-Dimer, INR, APTT gibi laboratuvar değerlerini otomatik çıkarır</p>
+                                <button class="btn btn-secondary" style="margin-top:12px;" onclick="pasteFromClipboard('laboratory')">
+                                    <i class="fa-solid fa-paste"></i> Panodan Lab Sonucu Yapıştır
+                                </button>
+                            </div>
+                            <div id="labProcessedInfo" style="margin-top:12px; display:none;">
+                                <div style="background:var(--warning-glow); border:1px solid rgba(255,145,0,0.3); border-radius:8px; padding:12px;">
+                                    <p style="font-size:12px; color:var(--warning); font-weight:600; margin-bottom:6px;"><i class="fa-solid fa-check-circle" style="margin-right:4px;"></i>Lab Sonuçları İşlendi</p>
+                                    <p id="labProcessResult" style="font-size:11px; color:var(--text);"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -747,6 +793,51 @@
                                 <label class="field-label" for="aptt">APTT (sn)</label>
                                 <input type="number" step="0.1" class="input-field" id="aptt" placeholder="APTT">
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Ultrason Sonuçları Kartı -->
+                    <div class="card" style="padding:20px;">
+                        <div class="section-title">
+                            <i class="fa-solid fa-ultrasound"></i>
+                            <span>Ultrason Sonuclari</span>
+                        </div>
+                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+                            <div>
+                                <label class="field-label" for="ultrasonSonucu">Ultrason Sonucu</label>
+                                <select class="select-field" id="ultrasonSonucu">
+                                    <option value="">Seciniz</option>
+                                    <option value="Pozitif">Pozitif</option>
+                                    <option value="Negatif">Negatif</option>
+                                    <option value="Şüpheli">Şüpheli</option>
+                                    <option value="Değerlendirilemedi">Değerlendirilemedi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label" for="ultrasonLokalizasyon">Ultrason Lokalizasyon</label>
+                                <select class="select-field" id="ultrasonLokalizasyon">
+                                    <option value="">Seciniz</option>
+                                    <option value="Proksimal">Proksimal</option>
+                                    <option value="Distal">Distal</option>
+                                    <option value="Proksimal + Distal">Proksimal + Distal</option>
+                                    <option value="Poplitea">Poplitea</option>
+                                    <option value="Femoral">Femoral</option>
+                                    <option value="Tibial">Tibial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label" for="ultrasonTaraf">Ultrason Taraf</label>
+                                <select class="select-field" id="ultrasonTaraf">
+                                    <option value="">Seciniz</option>
+                                    <option value="Sol">Sol</option>
+                                    <option value="Sag">Sag</option>
+                                    <option value="Bilateral">Bilateral</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="margin-top:14px;">
+                            <label class="field-label" for="ultrasonNotlar">Ultrason Notlari</label>
+                            <textarea class="input-field" id="ultrasonNotlar" placeholder="Ultrason bulgularina ait ek notlar..." rows="3" style="resize:vertical; min-height:60px;"></textarea>
                         </div>
                     </div>
 
@@ -1027,16 +1118,18 @@
                 let filledCount = 0;
 
                 // TC Kimlik
-                const tcMatch = text.match(/Kimlik[:\s]*(\d{11})/i) || text.match(/(?<!\d)(\d{11})(?!\d)/);
+                const tcMatch = text.match(/Kimlik[:\s]*(\d{11})/i) || text.match(/TC\s*No[:\s]*(\d{11})/i) || text.match(/(?<!\d)(\d{11})(?!\d)/);
                 if (tcMatch) { markAutoFilled('tcKimlik', tcMatch[1]); filledCount++; }
 
                 // Adı
-                const adiMatch = text.match(/Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Soyadi|Baba|Doğum|Cinsiyet|Kimlik|$))/i);
+                const adiMatch = text.match(/Ad[iı][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Soyad[ıi]|Baba|Doğum|Cinsiyet|Kimlik|$))/i)
+                    || text.match(/Ad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
                 if (adiMatch) {
                     const adi = adiMatch[1].trim();
                     if (adi.length > 1) {
                         // Soyadı da ayrı var mı kontrol et
-                        const soyadiMatch = text.match(/Soyadi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|$))/i);
+                        const soyadiMatch = text.match(/Soyad[ıi][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|Ad[iı]|$))/i)
+                            || text.match(/Soyad[iı][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i);
                         const soyadi = soyadiMatch ? soyadiMatch[1].trim() : '';
                         const full = soyadi ? `${adi} ${soyadi}` : adi;
                         markAutoFilled('adSoyad', full);
@@ -1046,15 +1139,18 @@
 
                 // Ad Soyad birlikte geçiyorsa (başka formatta)
                 if (!document.getElementById('adSoyad').value) {
-                    const adSoyadMatch = text.match(/Ad\s*Soyad[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|Yaş|$))/i);
+                    const adSoyadMatch = text.match(/Ad\s*Soyad[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|Yaş|$))/i)
+                        || text.match(/Hasta\s*Ad[ıi][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü\s]+?)(?=\s*(Baba|Doğum|Cinsiyet|Kimlik|$))/i);
                     if (adSoyadMatch && adSoyadMatch[1].trim().length > 2) {
                         markAutoFilled('adSoyad', adSoyadMatch[1].trim());
                         filledCount++;
                     }
                 }
 
-                // Baba Adı
-                const babaMatch = text.match(/Baba\s*Adi[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*(Doğum|Cinsiyet|Kimlik|Adi|Soyadi|$))/i);
+                // Baba Adı - daha geniş patternler
+                const babaMatch = text.match(/Baba\s*Ad[ıi][:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*(Doğum|Cinsiyet|Kimlik|Ad[iı]|Soyad[ıi]|$))/i)
+                    || text.match(/Baba\s*Ad[ıi][:\s]*([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*[A-ZÇĞİÖŞÜ]|$)/i)
+                    || text.match(/Baba[:\s]+([A-ZÇĞİÖŞÜa-zçğıöşü]+?)(?=\s*(Doğum|Cinsiyet|Kimlik|$))/i);
                 if (babaMatch && babaMatch[1].trim().length > 1) {
                     markAutoFilled('babaAdi', babaMatch[1].trim());
                     filledCount++;
@@ -1069,14 +1165,15 @@
                     filledCount++;
                     // Yaş hesapla
                     const age = calculateAge(date);
-                    if (age !== null && age > 0 && age < 150) {
-                        markAutoFilled('yas', age.toString());
-                        filledCount++;
-                    }
+                    if (age && age > 0) { markAutoFilled('yas', age.toString()); filledCount++; }
                 }
 
-                // SGK No
-                const sgkMatch = text.match(/Sosyal\s*Guvenlik\s*No[:\s]*(\d+)/i) || text.match(/SGK\s*No[:\s]*(\d+)/i);
+                // SGK No - daha geniş patternler
+                const sgkMatch = text.match(/Sosyal\s*Guvenlik\s*No[:\s]*(\d+)/i)
+                    || text.match(/SGK\s*No[:\s]*(\d+)/i)
+                    || text.match(/Sosyal\s*Guvenlik[:\s]*(\d+)/i)
+                    || text.match(/SGK[:\s]*(\d+)/i)
+                    || text.match(/Sigorta\s*No[:\s]*(\d+)/i);
                 if (sgkMatch) { markAutoFilled('sgkNo', sgkMatch[1]); filledCount++; }
 
                 // Cinsiyet
