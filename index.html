@@ -1,1 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akgün HBYS Veri Toplama - Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Akgün HBYS Veri Toplama Paneli</h1>
+            <p>Web tabanlý radyoloji ve laboratuvar veri analizi sistemi</p>
+        </header>
 
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            <!-- Manual Fields -->
+            <div class="lg:col-span-1">
+                <div class="glass">
+                    <h2 class="section-header">
+                        <span class="icon" data-lucide="user"></span>
+                        Manuel Bilgiler
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="form-label">Hasta ID</label>
+                            <input type="text" id="hasta_id" class="form-input" placeholder="HBYS ID">
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" id="ad_soyad" class="form-input" placeholder="Hasta adý">
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Yaþ</label>
+                            <input type="number" id="yas" class="form-input" placeholder="Yaþ">
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Cinsiyet</label>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="setGender('K')" class="btn btn-secondary">K</button>
+                                <button type="button" onclick="setGender('E')" class="btn btn-secondary">E</button>
+                            </div>
+                            <input type="hidden" id="cinsiyet">
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Ýl</label>
+                            <input type="text" id="il" class="form-input" placeholder="Ýl">
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Ýlçe</label>
+                            <input type="text" id="ilce" class="form-input" placeholder="Ýlçe">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Analysis -->
+            <div class="lg:col-span-2">
+                <div class="glass">
+                    <h2 class="section-header">
+                        <span class="icon" data-lucide="file-text"></span>
+                        Metin Analizi
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="form-label">Radyoloji Metni</label>
+                            <textarea id="radyoloji_text" class="form-input form-textarea" placeholder="Radyoloji raporunu yapýþtýrýn..."></textarea>
+                            <button onclick="analyzeRadiology()" class="btn btn-primary btn-w-full">
+                                <span class="btn-icon" data-lucide="search"></span>
+                                Radyoloji Analiz Et
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label">Laboratuvar Metni</label>
+                            <textarea id="lab_text" class="form-input form-textarea" placeholder="Lab sonuçlarýný yapýþtýrýn..."></textarea>
+                            <button onclick="analyzeLab()" class="btn btn-primary btn-w-full">
+                                <span class="btn-icon" data-lucide="search"></span>
+                                Lab Analiz Et
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Auto Results -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="form-label">DVT Sonucu</label>
+                            <input type="text" id="dvt_sonucu" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Taraf</label>
+                            <input type="text" id="taraf" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Lokalizasyon</label>
+                            <input type="text" id="lokalizasyon" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Hb</label>
+                            <input type="text" id="hb" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">WBC</label>
+                            <input type="text" id="wbc" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">PLT</label>
+                            <input type="text" id="plt" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Kreatinin</label>
+                            <input type="text" id="kreatinin" readonly class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">CRP</label>
+                            <input type="text" id="crp" readonly class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="saveRecord()" class="btn btn-primary">
+                            <span class="btn-icon" data-lucide="save"></span>
+                            Kaydet
+                        </button>
+                        <button onclick="clearForm()" class="btn btn-secondary">
+                            <span class="btn-icon" data-lucide="trash-2"></span>
+                            Formu Temizle
+                        </button>
+                        <button onclick="downloadExcel()" class="btn btn-secondary">
+                            <span class="btn-icon" data-lucide="download"></span>
+                            Excel Ýndir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="status-bar glass">
+            <div class="status-content">
+                <span class="status-icon" data-lucide="info"></span>
+                <span id="status" class="status-text">Hazýr - Veri giriþi yapabilirsiniz</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
