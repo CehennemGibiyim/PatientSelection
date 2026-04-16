@@ -1,24 +1,32 @@
-FROM node:18-alpine
+version: '3.8'
 
-# Çalışma dizini
-WORKDIR /app
+services:
+  hbys-panel:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3a
+      start_period: 40s
 
-# Paketleri kopyala ve kur
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Tüm dosyaları kopyala
-COPY . .
-
-# HTTP sunucusunu kur
-RUN npm install -g http-server
-
-# Port aç
-EXPOSE 8080
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080 || exit 1
-
-# Sunucuyu başlat
-CMD ["http-server", "-p", "8080", "-c-1"]
+  hbys-panel-dev:
+    build: .
+    ports:
+      - "3000:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    profiles:
+      - dev
