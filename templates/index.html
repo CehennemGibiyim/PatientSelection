@@ -4,70 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akgün HBYS Veri Toplama - Web</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { background: linear-gradient(135deg, #0b1020 0%, #1a1f3a 100%); }
-        .glass { background: rgba(18, 26, 43, 0.8); backdrop-filter: blur(10px); }
-        .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
-        .btn-secondary { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); }
-        .field-input { background: rgba(248, 250, 252, 0.1); border: 1px solid rgba(148, 163, 184, 0.3); }
-        .field-input:focus { border-color: #3b82f6; background: rgba(248, 250, 252, 0.15); }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="min-h-screen text-white">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+<body>
+    <div class="container">
         <!-- Header -->
-        <header class="mb-8">
-            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Akgün HBYS Veri Toplama Paneli
-            </h1>
-            <p class="text-gray-400">Web tabanlý radyoloji ve laboratuvar veri analizi sistemi</p>
+        <header>
+            <h1>Akgün HBYS Veri Toplama Paneli</h1>
+            <p>Web tabanlý radyoloji ve laboratuvar veri analizi sistemi</p>
         </header>
 
         <!-- Main Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
             <!-- Manual Fields -->
             <div class="lg:col-span-1">
-                <div class="glass rounded-xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center">
-                        <i data-lucide="user" class="w-5 h-5 mr-2"></i>
+                <div class="glass">
+                    <h2 class="section-header">
+                        <span class="icon" data-lucide="user"></span>
                         Manuel Bilgiler
                     </h2>
                     
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Hasta ID</label>
-                            <input type="text" id="hasta_id" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none" placeholder="HBYS ID">
+                            <label class="form-label">Hasta ID</label>
+                            <input type="text" id="hasta_id" class="form-input" placeholder="HBYS ID">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Ad Soyad</label>
-                            <input type="text" id="ad_soyad" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none" placeholder="Hasta adý">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" id="ad_soyad" class="form-input" placeholder="Hasta adý">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Yaþ</label>
-                            <input type="number" id="yas" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none" placeholder="Yaþ">
+                            <label class="form-label">Yaþ</label>
+                            <input type="number" id="yas" class="form-input" placeholder="Yaþ">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Cinsiyet</label>
+                            <label class="form-label">Cinsiyet</label>
                             <div class="flex gap-2">
-                                <button type="button" onclick="setGender('K')" class="btn-secondary px-4 py-2 rounded-lg text-white">K</button>
-                                <button type="button" onclick="setGender('E')" class="btn-secondary px-4 py-2 rounded-lg text-white">E</button>
+                                <button type="button" onclick="setGender('K')" class="btn btn-secondary">K</button>
+                                <button type="button" onclick="setGender('E')" class="btn btn-secondary">E</button>
                             </div>
                             <input type="hidden" id="cinsiyet">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Ýl</label>
-                            <input type="text" id="il" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none" placeholder="Ýl">
+                            <label class="form-label">Ýl</label>
+                            <input type="text" id="il" class="form-input" placeholder="Ýl">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Ýlçe</label>
-                            <input type="text" id="ilce" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none" placeholder="Ýlçe">
+                            <label class="form-label">Ýlçe</label>
+                            <input type="text" id="ilce" class="form-input" placeholder="Ýlçe">
                         </div>
                     </div>
                 </div>
@@ -75,80 +64,80 @@
 
             <!-- Text Analysis -->
             <div class="lg:col-span-2">
-                <div class="glass rounded-xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center">
-                        <i data-lucide="file-text" class="w-5 h-5 mr-2"></i>
+                <div class="glass">
+                    <h2 class="section-header">
+                        <span class="icon" data-lucide="file-text"></span>
                         Metin Analizi
                     </h2>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Radyoloji Metni</label>
-                            <textarea id="radyoloji_text" rows="8" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none resize-none" placeholder="Radyoloji raporunu yapýþtýrýn..."></textarea>
-                            <button onclick="analyzeRadiology()" class="btn-primary w-full mt-2 px-4 py-2 rounded-lg text-white font-medium">
-                                <i data-lucide="search" class="w-4 h-4 inline mr-2"></i>
+                            <label class="form-label">Radyoloji Metni</label>
+                            <textarea id="radyoloji_text" class="form-input form-textarea" placeholder="Radyoloji raporunu yapýþtýrýn..."></textarea>
+                            <button onclick="analyzeRadiology()" class="btn btn-primary btn-w-full">
+                                <span class="btn-icon" data-lucide="search"></span>
                                 Radyoloji Analiz Et
                             </button>
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium mb-1">Laboratuvar Metni</label>
-                            <textarea id="lab_text" rows="8" class="field-input w-full px-3 py-2 rounded-lg text-white outline-none resize-none" placeholder="Lab sonuçlarýný yapýþtýrýn..."></textarea>
-                            <button onclick="analyzeLab()" class="btn-primary w-full mt-2 px-4 py-2 rounded-lg text-white font-medium">
-                                <i data-lucide="search" class="w-4 h-4 inline mr-2"></i>
+                            <label class="form-label">Laboratuvar Metni</label>
+                            <textarea id="lab_text" class="form-input form-textarea" placeholder="Lab sonuçlarýný yapýþtýrýn..."></textarea>
+                            <button onclick="analyzeLab()" class="btn btn-primary btn-w-full">
+                                <span class="btn-icon" data-lucide="search"></span>
                                 Lab Analiz Et
                             </button>
                         </div>
                     </div>
 
                     <!-- Auto Results -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">DVT Sonucu</label>
-                            <input type="text" id="dvt_sonucu" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">DVT Sonucu</label>
+                            <input type="text" id="dvt_sonucu" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Taraf</label>
-                            <input type="text" id="taraf" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">Taraf</label>
+                            <input type="text" id="taraf" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Lokalizasyon</label>
-                            <input type="text" id="lokalizasyon" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">Lokalizasyon</label>
+                            <input type="text" id="lokalizasyon" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Hb</label>
-                            <input type="text" id="hb" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">Hb</label>
+                            <input type="text" id="hb" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">WBC</label>
-                            <input type="text" id="wbc" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">WBC</label>
+                            <input type="text" id="wbc" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">PLT</label>
-                            <input type="text" id="plt" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">PLT</label>
+                            <input type="text" id="plt" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Kreatinin</label>
-                            <input type="text" id="kreatinin" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">Kreatinin</label>
+                            <input type="text" id="kreatinin" readonly class="form-input">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">CRP</label>
-                            <input type="text" id="crp" readonly class="field-input w-full px-3 py-2 rounded-lg text-white outline-none bg-opacity-50">
+                            <label class="form-label">CRP</label>
+                            <input type="text" id="crp" readonly class="form-input">
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap gap-3">
-                        <button onclick="saveRecord()" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">
-                            <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>
+                        <button onclick="saveRecord()" class="btn btn-primary">
+                            <span class="btn-icon" data-lucide="save"></span>
                             Kaydet
                         </button>
-                        <button onclick="clearForm()" class="btn-secondary px-6 py-2 rounded-lg text-white font-medium">
-                            <i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i>
+                        <button onclick="clearForm()" class="btn btn-secondary">
+                            <span class="btn-icon" data-lucide="trash-2"></span>
                             Formu Temizle
                         </button>
-                        <button onclick="downloadExcel()" class="btn-secondary px-6 py-2 rounded-lg text-white font-medium">
-                            <i data-lucide="download" class="w-4 h-4 inline mr-2"></i>
+                        <button onclick="downloadExcel()" class="btn btn-secondary">
+                            <span class="btn-icon" data-lucide="download"></span>
                             Excel Ýndir
                         </button>
                     </div>
@@ -157,150 +146,14 @@
         </div>
 
         <!-- Status -->
-        <div class="mt-6 glass rounded-xl p-4 border border-gray-700">
-            <div class="flex items-center">
-                <i data-lucide="info" class="w-5 h-5 mr-2 text-blue-400"></i>
-                <span id="status" class="text-gray-300">Hazýr - Veri giriþi yapabilirsiniz</span>
+        <div class="status-bar glass">
+            <div class="status-content">
+                <span class="status-icon" data-lucide="info"></span>
+                <span id="status" class="status-text">Hazýr - Veri giriþi yapabilirsiniz</span>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script>
-        lucide.createIcons();
-
-        function setGender(gender) {
-            document.getElementById('cinsiyet').value = gender;
-            updateStatus(`Cinsiyet seçildi: ${gender === 'K' ? 'Kadýn' : 'Erkek'}`);
-        }
-
-        function updateStatus(message) {
-            document.getElementById('status').textContent = message;
-        }
-
-        async function analyzeRadiology() {
-            const text = document.getElementById('radyoloji_text').value.trim();
-            if (!text) {
-                updateStatus('Radyoloji metni boþ');
-                return;
-            }
-
-            updateStatus('Radyoloji analizi yapýlýyor...');
-            
-            try {
-                const response = await fetch('/api/analyze_radiology', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('dvt_sonucu').value = data.dvt_sonucu;
-                    document.getElementById('taraf').value = data.taraf;
-                    document.getElementById('lokalizasyon').value = data.lokalizasyon;
-                    updateStatus('Radyoloji analizi tamamlandý');
-                } else {
-                    updateStatus('Hata: ' + data.error);
-                }
-            } catch (error) {
-                updateStatus('Hata: ' + error.message);
-            }
-        }
-
-        async function analyzeLab() {
-            const text = document.getElementById('lab_text').value.trim();
-            if (!text) {
-                updateStatus('Lab metni boþ');
-                return;
-            }
-
-            updateStatus('Lab analizi yapýlýyor...');
-            
-            try {
-                const response = await fetch('/api/analyze_lab', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('hb').value = data.hb;
-                    document.getElementById('wbc').value = data.wbc;
-                    document.getElementById('plt').value = data.plt;
-                    document.getElementById('kreatinin').value = data.kreatinin;
-                    document.getElementById('crp').value = data.crp;
-                    updateStatus('Lab analizi tamamlandý');
-                } else {
-                    updateStatus('Hata: ' + data.error);
-                }
-            } catch (error) {
-                updateStatus('Hata: ' + error.message);
-            }
-        }
-
-        async function saveRecord() {
-            const hasta_id = document.getElementById('hasta_id').value.trim();
-            const ad_soyad = document.getElementById('ad_soyad').value.trim();
-
-            if (!hasta_id || !ad_soyad) {
-                updateStatus('Hasta ID ve Ad Soyad boþ olamaz');
-                return;
-            }
-
-            updateStatus('Kayýt kaydediliyor...');
-
-            const record = {
-                hasta_id,
-                ad_soyad,
-                yas: document.getElementById('yas').value,
-                cinsiyet: document.getElementById('cinsiyet').value,
-                il: document.getElementById('il').value,
-                ilce: document.getElementById('ilce').value,
-                hb: document.getElementById('hb').value,
-                wbc: document.getElementById('wbc').value,
-                plt: document.getElementById('plt').value,
-                kreatinin: document.getElementById('kreatinin').value,
-                crp: document.getElementById('crp').value,
-                radyoloji_raporu: document.getElementById('radyoloji_text').value,
-                lab_metin: document.getElementById('lab_text').value,
-                dvt_sonucu: document.getElementById('dvt_sonucu').value,
-                taraf: document.getElementById('taraf').value,
-                lokalizasyon: document.getElementById('lokalizasyon').value,
-            };
-
-            try {
-                const response = await fetch('/api/save_record', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(record)
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    updateStatus('Kayýt baþarýyla kaydedildi');
-                    clearForm();
-                } else {
-                    updateStatus('Hata: ' + data.error);
-                }
-            } catch (error) {
-                updateStatus('Hata: ' + error.message);
-            }
-        }
-
-        function clearForm() {
-            document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(field => {
-                field.value = '';
-            });
-            document.getElementById('cinsiyet').value = '';
-            updateStatus('Form temizlendi');
-        }
-
-        function downloadExcel() {
-            window.location.href = '/download';
-            updateStatus('Excel dosyasý indiriliyor...');
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
