@@ -146,129 +146,7 @@ function closePatientVerificationModal() {
     }
 }
 
-/* ===================================================
-   Laboratuvar Sonuçları OCR İşleme
-=================================================== */
-async function processLaboratoryFile(file) {
-    showOcrModal('Laboratuvar Sonuçları Analiz Ediliyor', 'Laboratuvar değerleri çıkarılıyor...');
-    try {
-        let imageData = file;
-        if (file.type === 'application/pdf') {
-            updateOcrProgress(0.1, 'PDF dosyası okunuyor...');
-            imageData = await pdfToCanvas(file);
-            updateOcrProgress(0.2, 'Görsel hazırlandı, OCR başlıyor...');
-        }
-
-        const { data: { text } } = await Tesseract.recognize(imageData, 'tur+eng', {
-            logger: m => {
-                if (m.status === 'recognizing text') {
-                    updateOcrProgress(0.2 + m.progress * 0.7, `Lab sonucu tanınıyor... %${Math.round(m.progress * 100)}`);
-                } else if (m.status === 'loading language traineddata') {
-                    updateOcrProgress(0.05 + m.progress * 0.15, 'Dil verisi indiriliyor...');
-                }
-            }
-        });
-
-        updateOcrProgress(0.95, 'Laboratuvar değerleri çıkarılıyor...');
-        await new Promise(r => setTimeout(r, 300));
-
-        const normalized = normalizeTurkish(text);
-        let filledCount = 0;
-        const labResults = [];
-
-        // Hb (Hemoglobin)
-        const hbMatch = text.match(/Hb[:\s]*(\d+\.?\d*)\s*(g\/dl|g\/dL)/i) 
-            || text.match(/Hemoglobin[:\s]*(\d+\.?\d*)/i)
-            || text.match(/(\d+\.?\d*)\s*(g\/dl|g\/dL)\s*Hb/i);
-        if (hbMatch) {
-            markAutoFilled('hb', hbMatch[1]);
-            labResults.push(`Hb: ${hbMatch[1]} g/dL`);
-            filledCount++;
-        }
-
-        // D-Dimer
-        const dDimerMatch = text.match(/D-?Dimer[:\s]*(\d+\.?\d*)\s*(ug\/ml|ug\/mL|ng\/ml|ng\/mL)/i)
-            || text.match(/D.?Dimer[:\s]*(\d+\.?\d*)/i);
-        if (dDimerMatch) {
-            markAutoFilled('dDimer', dDimerMatch[1]);
-            labResults.push(`D-Dimer: ${dDimerMatch[1]} ug/mL`);
-            filledCount++;
-        }
-
-        // INR
-        const inrMatch = text.match(/INR[:\s]*(\d+\.?\d*)/i)
-            || text.match(/(\d+\.?\d*)\s*INR/i);
-        if (inrMatch) {
-            markAutoFilled('inr', inrMatch[1]);
-            labResults.push(`INR: ${inrMatch[1]}`);
-            filledCount++;
-        }
-
-        // APTT
-        const apttMatch = text.match(/APTT[:\s]*(\d+\.?\d*)\s*(sn|s|sec)/i)
-            || text.match(/aPTT[:\s]*(\d+\.?\d*)/i)
-            || text.match(/(\d+\.?\d*)\s*(sn|s|sec)\s*APTT/i);
-        if (apttMatch) {
-            markAutoFilled('aptt', apttMatch[1]);
-            labResults.push(`APTT: ${apttMatch[1]} sn`);
-            filledCount++;
-        }
-
-        // Trombosit
-        const trombositMatch = text.match(/Trombosit[:\s]*(\d+)\s*(10\^3\/ul|10³\/ul|\/ul)/i)
-            || text.match(/Platelet[:\s]*(\d+)\s*(10\^3\/ul|10³\/ul|\/ul)/i)
-            || text.match(/(\d+)\s*(10\^3\/ul|10³\/ul|\/ul)\s*Trombosit/i);
-        if (trombositMatch) {
-            markAutoFilled('trombosit', trombositMatch[1]);
-            labResults.push(`Trombosit: ${trombositMatch[1]} 10³/uL`);
-            filledCount++;
-        }
-
-        // Urik Asit
-        const urikAsitMatch = text.match(/Urik\s*Asit[:\s]*(\d+\.?\d*)\s*(mg\/dl|mg\/dL)/i)
-            || text.match(/Uric\s*Acid[:\s]*(\d+\.?\d*)/i);
-        if (urikAsitMatch) {
-            markAutoFilled('urikAsit', urikAsitMatch[1]);
-            labResults.push(`Urik Asit: ${urikAsitMatch[1]} mg/dL`);
-            filledCount++;
-        }
-
-        // Albumin
-        const albuminMatch = text.match(/Albumin[:\s]*(\d+\.?\d*)\s*(g\/dl|g\/dL)/i)
-            || text.match(/(\d+\.?\d*)\s*(g\/dl|g\/dL)\s*Albumin/i);
-        if (albuminMatch) {
-            markAutoFilled('albumin', albuminMatch[1]);
-            labResults.push(`Albumin: ${albuminMatch[1]} g/dL`);
-            filledCount++;
-        }
-
-        // Total Protein
-        const totalProteinMatch = text.match(/Total\s*Protein[:\s]*(\d+\.?\d*)\s*(g\/dl|g\/dL)/i)
-            || text.match(/(\d+\.?\d*)\s*(g\/dl|g\/dL)\s*Total\s*Protein/i);
-        if (totalProteinMatch) {
-            markAutoFilled('totalProtein', totalProteinMatch[1]);
-            labResults.push(`Total Protein: ${totalProteinMatch[1]} g/dL`);
-            filledCount++;
-        }
-
-        hideOcrModal();
-        
-        if (filledCount > 0) {
-            // Lab sonuçları bilgisini göster
-            document.getElementById('labProcessResult').textContent = labResults.join(', ');
-            document.getElementById('labProcessedInfo').style.display = 'block';
-            
-            showToast(`${filledCount} laboratuvar değeri otomatik dolduruldu. Lütfen kontrol edin.`, 'success');
-            updateStatus(4);
-        } else {
-            showToast('Laboratuuar değerleri çıkarılamadı. Manuel girmeyi deneyin.', 'warning');
-        }
-    } catch (err) {
-        hideOcrModal();
-        console.error('Laboratuvar OCR hatası:', err);
-        showToast('Laboratuvar analizi başarısız: ' + err.message, 'error');
-    }
-}
+// Laboratuvar işleme fonksiyonu index.html'de multi-page PDF desteği ile tanımlıdır
 
 /* ===================================================
    Sekme Geçişi Fonksiyonu
@@ -322,26 +200,7 @@ function enhancedSavePatient() {
    Event Listener Ekleme
 =================================================== */
 document.addEventListener('DOMContentLoaded', function() {
-    // Laboratuvar dosya yükleme event listener'ı
-    const labFileInput = document.getElementById('labFileInput');
-    if (labFileInput) {
-        labFileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
-                showToast('Laboratuvar sonucu için PDF veya görsel dosya seçin.', 'error');
-                return;
-            }
-            processLaboratoryFile(file);
-            this.value = '';
-        });
-    }
-    
-    // Drag & Drop desteği için laboratuvar alanı
-    const labUploadZone = document.getElementById('labUploadZone');
-    if (labUploadZone) {
-        setupDragDrop('labUploadZone', 'labFileInput');
-    }
+    // Laboratuvar işleme index.html'de tanımlıdır
     
     // Ad soyad alanına yazma olayında doğrulama
     const adSoyadField = document.getElementById('adSoyad');
@@ -356,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Global fonksiyonları dışa aktar
 window.verifyPatientName = verifyPatientName;
-window.processLaboratoryFile = processLaboratoryFile;
 window.switchTab = switchTab;
 window.enhancedSavePatient = enhancedSavePatient;
 window.selectExistingPatient = selectExistingPatient;
