@@ -15,7 +15,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 30s
       timeout: 10s
-      retries: 3a
+      retries: 3
       start_period: 40s
 
   hbys-panel-dev:
