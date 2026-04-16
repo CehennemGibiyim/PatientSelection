@@ -1,0 +1,42 @@
+{
+  "name": "hbys-veri-toplama-paneli",
+  "version": "1.0.0",
+  "description": "Hastane Bilgi Yönetim Sistemi - OCR destekli otomatik veri toplama aracı",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "build": "echo 'Build complete - ready for deployment'",
+    "dev": "npx http-server -p 8080 -o",
+    "serve-https": "npx http-server -p 8080 -S -C cert.pem -K key.pem"
+  },
+  "keywords": [
+    "hbys",
+    "medical",
+    "ocr",
+    "data-collection",
+    "hospital",
+    "türkiye",
+    "hasta-verisi"
+  ],
+  "author": "HBYS Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "tesseract.js": "^5.0.4",
+    "pdfjs-dist": "^3.11.174",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kullanici/hbys-veri-toplama-paneli.git"
+  },
+  "homepage": "https://kullanici.github.io/hbys-veri-toplama-paneli",
+  "bugs": {
+    "url": "https://github.com/kullanici/hbys-veri-toplama-paneli/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
