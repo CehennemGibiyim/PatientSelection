@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -1306,7 +1306,11 @@
                     /Kurum\s*No[.:\s]*(\d[\d\s]*)/i,
                     /S\s*G\s*K\s*[:\s]*(\d[\d\s]*)/i,
                     /Sosyal\s*Guv[.:\s]*(\d[\d\s]*)/i,
-                    /Sgk\s*[:\s]*(\d[\d\s]*)/i
+                    /Sgk\s*[:\s]*(\d[\d\s]*)/i,
+                    /Sicil\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /YUPASS\s*No[.:\s]*(\d[\d\s]*)/i,
+                    /Sicil[.:\s]*(\d[\d\s]*)/i,
+                    /YUPASS[.:\s]*(\d[\d\s]*)/i
                 ];
                 
                 for (let pattern of sgkPatterns) {
@@ -1755,7 +1759,9 @@
                     /Glukoz\s+([\d\.,]+)/i,
                     /\bglukoz\b[^\d]*(\d+[\.,]?\d*)/i,
                     /Glukoz\s*\(\d+\)\s*mg[^\d]*(\d+[\.,]?\d*)/i,
-                    /Açlık\s*Glikoz[:\s]+(\d+[\.,]?\d*)/i
+                    /Açlık\s*Glikoz[:\s]+(\d+[\.,]?\d*)/i,
+                    /Glukoz\s*EX\)\s*mg[^\d]*(\d+[\.,]?\d*)/i,
+                    /Glukoz\s*[^\d]*(\d+[\.,]?\d*)\s*mg[^\d]*\(70-100\)/i
                 ]},
                 // CRP
                 { key: 'crp', regexes: [
@@ -1796,7 +1802,9 @@
                     /HDL\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
                     /HDL\s+([\d\.,]+)/i,
                     /HDL-C[:\s]+(\d+[\.,]?\d*)/i,
-                    /\bhdl\b[^\d]*(\d+[\.,]?\d*)/i
+                    /\bhdl\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /HDLC\s+([\d\.,]+)/i,
+                    /HDLC\s*[^\d]*(\d+[\.,]?\d*)\s*mgl/i
                 ]},
                 // LDL
                 { key: 'ldl', regexes: [
@@ -1864,7 +1872,9 @@
                     /\bNa\b[:\s]+(\d+[\.,]?\d*)/i,
                     /Sodyum\s*\(mmol\/L\)[:\s]+(\d+[\.,]?\d*)/i,
                     /Sodyum\s+([\d\.,]+)/i,
-                    /\bsodyum\b[^\d]*(\d+[\.,]?\d*)/i
+                    /\bsodyum\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /Sodyum\s*mmolL\s*\(136\s*-\s*145\)/i,
+                    /Sodyum\s*[^\d]*(\d+[\.,]?\d*)\s*mmolL/i
                 ]},
                 // Potasyum (K)
                 { key: 'potasyum', regexes: [
@@ -1873,6 +1883,22 @@
                     /Potasyum\s*\(mmol\/L\)[:\s]+(\d+[\.,]?\d*)/i,
                     /Potasyum\s+([\d\.,]+)/i,
                     /\bpotasyum\b[^\d]*(\d+[\.,]?\d*)/i
+                ]},
+                // GFR (Glomerular Filtrasyon Hizi)
+                { key: 'gfr', regexes: [
+                    /\bGFR\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /eGFR[:\s]+(\d+[\.,]?\d*)/i,
+                    /GFR\s*ml[^\d]*(\d+[\.,]?\d*)/i,
+                    /GFR\s+mldk[^\d]*(\d+[\.,]?\d*)/i,
+                    /GFR\s*[^\d]*(\d+[\.,]?\d*)\s*ml[^\d]*\/[^\d]*1\.73m2/i
+                ]},
+                // Klor (Cl)
+                { key: 'klor', regexes: [
+                    /\bKlor\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bCl\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Klor\s*mmolL\s*\(68-109\)/i,
+                    /Klor\s*[^\d]*(\d+[\.,]?\d*)\s*mmolL/i,
+                    /Klor\s+([\d\.,]+)/i
                 ]}
             ];
             
