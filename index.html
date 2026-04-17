@@ -1421,11 +1421,51 @@
                 if (isProksimal && isDistal) {
                     markSelectAutoFilled('lokalizasyon', 'Proksimal + Distal');
                     filledCount++;
+                    // Ultrason lokalizasyonu da doldur
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Proksimal + Distal');
                 } else if (isProksimal) {
                     markSelectAutoFilled('lokalizasyon', 'Proksimal');
                     filledCount++;
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Proksimal');
                 } else if (isDistal) {
                     markSelectAutoFilled('lokalizasyon', 'Distal');
+                    filledCount++;
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Distal');
+                }
+
+                // Ultrason sonuçları - DVT sonucuna göre doldur
+                if (dvtPositivePatterns.test(text) && !dvtNegativePatterns.test(text)) {
+                    markSelectAutoFilled('ultrasonSonucu', 'Pozitif');
+                    filledCount++;
+                } else if (dvtNegativePatterns.test(text) || (/normal/i.test(normalized) && !dvtPositivePatterns.test(text))) {
+                    markSelectAutoFilled('ultrasonSonucu', 'Negatif');
+                    filledCount++;
+                }
+                
+                // Ultrason tarafını doldur
+                if (isBilateral) {
+                    markSelectAutoFilled('ultrasonTaraf', 'Bilateral');
+                    filledCount++;
+                } else if (isSol && isSag) {
+                    markSelectAutoFilled('ultrasonTaraf', 'Bilateral');
+                    filledCount++;
+                } else if (isSol) {
+                    markSelectAutoFilled('ultrasonTaraf', 'Sol');
+                    filledCount++;
+                } else if (isSag) {
+                    markSelectAutoFilled('ultrasonTaraf', 'Sag');
+                    filledCount++;
+                }
+                
+                // Ultrason lokalizasyonu doldur
+                if (isProksimal && isDistal) {
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Proksimal + Distal');
+                    filledCount++;
+                } else if (isProksimal) {
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Proksimal');
+                    filledCount++;
+                } else if (isDistal) {
+                    markSelectAutoFilled('ultrasonLokalizasyon', 'Distal');
                     filledCount++;
                 }
 
@@ -1658,13 +1698,14 @@
                     /APTT\s+([\d\.,]+)/i,
                     /\baptt\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
-                // Ürik Asit/Üre
+                // Üre (BUN) - ayrı alan
                 { key: 'urikAsit', regexes: [
-                    /\bÜre\b[:\s]+(\d+\.?\d*)/i,
-                    /\bUre\b[:\s]+(\d+\.?\d*)/i,
-                    /BUN[:\s]+(\d+\.?\d*)/i,
-                    /Üre\s*\(mg\/dL\)[:\s]+(\d+\.?\d*)/i,
-                    /Üre\s+([\d\.]+)/i
+                    /\bÜre\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bUre\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /BUN[:\s]+(\d+[\.,]?\d*)/i,
+                    /Üre\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Üre\s+([\d\.,]+)/i,
+                    /\bure\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // Albumin
                 { key: 'albumin', regexes: [
@@ -1725,17 +1766,19 @@
                 ]},
                 // AST
                 { key: 'ast', regexes: [
-                    /\bAST\b[:\s]+(\d+)/i,
-                    /\bSGOT\b[:\s]+(\d+)/i,
-                    /AST\s*\(U\/L\)[:\s]+(\d+)/i,
-                    /AST\s+([\d]+)/i
+                    /\bAST\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bSGOT\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /AST\s*\(U\/L\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /AST\s+([\d\.,]+)/i,
+                    /\bast\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // ALT
                 { key: 'alt', regexes: [
-                    /\bALT\b[:\s]+(\d+)/i,
-                    /\bSGPT\b[:\s]+(\d+)/i,
-                    /ALT\s*\(U\/L\)[:\s]+(\d+)/i,
-                    /ALT\s+([\d]+)/i
+                    /\bALT\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bSGPT\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /ALT\s*\(U\/L\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /ALT\s+([\d\.,]+)/i,
+                    /\balt\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // Kolesterol
                 { key: 'kolesterol', regexes: [
@@ -1748,17 +1791,21 @@
                 ]},
                 // HDL
                 { key: 'hdl', regexes: [
-                    /\bHDL\b[:\s]+(\d+)/i,
-                    /HDL-Kolesterol[:\s]+(\d+)/i,
-                    /HDL\s*\(mg\/dL\)[:\s]+(\d+)/i,
-                    /HDL\s+([\d]+)/i
+                    /\bHDL\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /HDL-Kolesterol[:\s]+(\d+[\.,]?\d*)/i,
+                    /HDL\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /HDL\s+([\d\.,]+)/i,
+                    /HDL-C[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bhdl\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // LDL
                 { key: 'ldl', regexes: [
-                    /\bLDL\b[:\s]+(\d+)/i,
-                    /LDL-Kolesterol[:\s]+(\d+)/i,
-                    /LDL\s*\(mg\/dL\)[:\s]+(\d+)/i,
-                    /LDL\s+([\d]+)/i
+                    /\bLDL\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /LDL-Kolesterol[:\s]+(\d+[\.,]?\d*)/i,
+                    /LDL\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /LDL\s+([\d\.,]+)/i,
+                    /LDL-C[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bldl\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // Trigliserit
                 { key: 'trigliserit', regexes: [
@@ -1810,6 +1857,22 @@
                     /Pro-BNP\s+([\d\.,]+)/i,
                     /\bpro-bnp\b[:\s]+(\d+[\.,]?\d*)/i,
                     /\bbnp\b[:\s]+(\d+[\.,]?\d*)/i
+                ]},
+                // Sodyum (Na)
+                { key: 'sodyum', regexes: [
+                    /\bSodyum\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bNa\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Sodyum\s*\(mmol\/L\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Sodyum\s+([\d\.,]+)/i,
+                    /\bsodyum\b[^\d]*(\d+[\.,]?\d*)/i
+                ]},
+                // Potasyum (K)
+                { key: 'potasyum', regexes: [
+                    /\bPotasyum\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bK\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Potasyum\s*\(mmol\/L\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Potasyum\s+([\d\.,]+)/i,
+                    /\bpotasyum\b[^\d]*(\d+[\.,]?\d*)/i
                 ]}
             ];
             
