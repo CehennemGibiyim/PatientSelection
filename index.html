@@ -1617,12 +1617,13 @@
             const patterns = [
                 // HGB/Hemoglobin
                 { key: 'hb', regexes: [
-                    /\bHGB\b[:\s]+(\d+\.?\d*)/i,
-                    /\bHb\b[:\s]+(\d+\.?\d*)/i,
-                    /Hemoglobin[:\s]+(\d+\.?\d*)/i,
-                    /HGB\s+(\d+\.?\d*)\s*g\/dL/i,
-                    /Hemoglobin\s*[:\s]+(\d+\.?\d*)/i,
-                    /\bHGB\s+(\d+\.?\d*)/i
+                    /\bHGB\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bHb\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Hemoglobin[:\s]+(\d+[\.,]?\d*)/i,
+                    /HGB\s+(\d+[\.,]?\d*)\s*g\/dL/i,
+                    /Hemoglobin\s*[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bHGB\s+(\d+[\.,]?\d*)/i,
+                    /\bhb\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // Trombosit/PLT
                 { key: 'trombosit', regexes: [
@@ -1635,24 +1636,27 @@
                 ]},
                 // D-Dimer
                 { key: 'dDimer', regexes: [
-                    /D[-\s]?Dimer[:\s]+(\d+\.?\d*)/i,
-                    /DDimer[:\s]+(\d+\.?\d*)/i,
-                    /D\s*Dimer[:\s]+(\d+\.?\d*)/i,
-                    /D-Dimer\s*\(ug\/mL\)[:\s]+(\d+\.?\d*)/i,
-                    /D-Dimer\s+([\d\.]+)/i
+                    /D[-\s]?Dimer[:\s]+(\d+[\.,]?\d*)/i,
+                    /DDimer[:\s]+(\d+[\.,]?\d*)/i,
+                    /D\s*Dimer[:\s]+(\d+[\.,]?\d*)/i,
+                    /D-Dimer\s*\(ug\/mL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /D-Dimer\s+([\d\.,]+)/i,
+                    /D\s*Dimer\s*([\d\.,]+)/i
                 ]},
                 // INR
                 { key: 'inr', regexes: [
-                    /\bINR\b[:\s]+(\d+\.?\d*)/i,
-                    /INR\s*[:\s]+(\d+\.?\d*)/i,
-                    /INR\s+([\d\.]+)/i
+                    /\bINR\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /INR\s*[:\s]+(\d+[\.,]?\d*)/i,
+                    /INR\s+([\d\.,]+)/i,
+                    /\binr\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // APTT
                 { key: 'aptt', regexes: [
-                    /\bAPTT\b[:\s]+(\d+\.?\d*)/i,
-                    /aPTT[:\s]+(\d+\.?\d*)/i,
-                    /APTT\s*\(sn\)[:\s]+(\d+\.?\d*)/i,
-                    /APTT\s+([\d\.]+)/i
+                    /\bAPTT\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /aPTT[:\s]+(\d+[\.,]?\d*)/i,
+                    /APTT\s*\(sn\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /APTT\s+([\d\.,]+)/i,
+                    /\baptt\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // Ürik Asit/Üre
                 { key: 'urikAsit', regexes: [
@@ -1678,10 +1682,12 @@
                 ]},
                 // Kreatinin
                 { key: 'kreatinin', regexes: [
-                    /\bKreatinin\b[:\s]+(\d+\.?\d*)/i,
-                    /\bCreatinine\b[:\s]+(\d+\.?\d*)/i,
-                    /Kreatinin\s*\(mg\/dL\)[:\s]+(\d+\.?\d*)/i,
-                    /Kreatinin\s+([\d\.]+)/i
+                    /\bKreatinin\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bCreatinine\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Kreatinin\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Kreatinin\s+([\d\.,]+)/i,
+                    /\bkreatinin\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /Kre\s*\.?\s*atinin\s*[:\s]*(\d+[\.,]?\d*)/i
                 ]},
                 // WBC
                 { key: 'wbc', regexes: [
@@ -1700,18 +1706,22 @@
                 ]},
                 // Glukoz
                 { key: 'glukoz', regexes: [
-                    /\bGlukoz\b[:\s]+(\d+\.?\d*)/i,
-                    /\bGlikoz\b[:\s]+(\d+\.?\d*)/i,
-                    /\bGlucose\b[:\s]+(\d+\.?\d*)/i,
-                    /Açlık\s*Glukoz[:\s]+(\d+\.?\d*)/i,
-                    /Glukoz\s*\(mg\/dL\)[:\s]+(\d+\.?\d*)/i,
-                    /Glukoz\s+([\d\.]+)/i
+                    /\bGlukoz\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bGlikoz\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bGlucose\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Açlık\s*Glukoz[:\s]+(\d+[\.,]?\d*)/i,
+                    /Glukoz\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Glukoz\s+([\d\.,]+)/i,
+                    /\bglukoz\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /Glukoz\s*\(\d+\)\s*mg[^\d]*(\d+[\.,]?\d*)/i,
+                    /Açlık\s*Glikoz[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // CRP
                 { key: 'crp', regexes: [
-                    /\bCRP\b[:\s]+(\d+\.?\d*)/i,
-                    /C\s*Reaktif\s*Protein[:\s]+(\d+\.?\d*)/i,
-                    /CRP\s+([\d\.]+)/i
+                    /\bCRP\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /C\s*Reaktif\s*Protein[:\s]+(\d+[\.,]?\d*)/i,
+                    /CRP\s+([\d\.,]+)/i,
+                    /\bcrp\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // AST
                 { key: 'ast', regexes: [
@@ -1729,10 +1739,12 @@
                 ]},
                 // Kolesterol
                 { key: 'kolesterol', regexes: [
-                    /\bKolesterol\b[:\s]+(\d+)/i,
-                    /\bTotal\s*Kolesterol\b[:\s]+(\d+)/i,
-                    /Kolesterol\s*\(mg\/dL\)[:\s]+(\d+)/i,
-                    /Kolesterol\s+([\d]+)/i
+                    /\bKolesterol\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bTotal\s*Kolesterol\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Kolesterol\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Kolesterol\s+([\d\.,]+)/i,
+                    /\bkolesterol\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /Kol\s*\.?\s*lesterol\s*[:\s]*(\d+[\.,]?\d*)/i
                 ]},
                 // HDL
                 { key: 'hdl', regexes: [
@@ -1750,46 +1762,54 @@
                 ]},
                 // Trigliserit
                 { key: 'trigliserit', regexes: [
-                    /\bTrigliserit\b[:\s]+(\d+)/i,
-                    /\bTriglyceride\b[:\s]+(\d+)/i,
-                    /\bTG\b[:\s]+(\d+)/i,
-                    /Trigliserit\s*\(mg\/dL\)[:\s]+(\d+)/i,
-                    /Trigliserit\s+([\d]+)/i
+                    /\bTrigliserit\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bTriglyceride\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bTG\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Trigliserit\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Trigliserit\s+([\d\.,]+)/i,
+                    /\btrigliserit\b[^\d]*(\d+[\.,]?\d*)/i,
+                    /Tri\s*\.?\s*gliserit\s*[:\s]*(\d+[\.,]?\d*)/i
                 ]},
                 // TSH
                 { key: 'tsh', regexes: [
-                    /\bTSH\b[:\s]+(\d+\.?\d*)/i,
-                    /TSH\s*\(mIU\/L\)[:\s]+(\d+\.?\d*)/i,
-                    /TSH\s+([\d\.]+)/i
+                    /\bTSH\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /TSH\s*\(mIU\/L\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /TSH\s+([\d\.,]+)/i,
+                    /\btsh\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // T4/Free T4
                 { key: 't4', regexes: [
-                    /\bSerbest\s*T4\b[:\s]+(\d+\.?\d*)/i,
-                    /\bFree\s*T4\b[:\s]+(\d+\.?\d*)/i,
-                    /\bT4\b[:\s]+(\d+\.?\d*)/i,
-                    /Serbest\s*T4\s+([\d\.]+)/i
+                    /\bSerbest\s*T4\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bFree\s*T4\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bT4\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Serbest\s*T4\s+([\d\.,]+)/i,
+                    /\bt4\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // Ürik Asit (doğru)
                 { key: 'urikAsit', regexes: [
-                    /\bÜrik\s*Asit\b[:\s]+(\d+\.?\d*)/i,
-                    /\bUrik\s*Asit\b[:\s]+(\d+\.?\d*)/i,
-                    /\bUric\s*Acid\b[:\s]+(\d+\.?\d*)/i,
-                    /Ürik\s*Asit\s*\(mg\/dL\)[:\s]+(\d+\.?\d*)/i,
-                    /Ürik\s*Asit\s+([\d\.]+)/i
+                    /\bÜrik\s*Asit\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bUrik\s*Asit\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bUric\s*Acid\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Ürik\s*Asit\s*\(mg\/dL\)[:\s]+(\d+[\.,]?\d*)/i,
+                    /Ürik\s*Asit\s+([\d\.,]+)/i,
+                    /\bürik\s*asit\b[^\d]*(\d+[\.,]?\d*)/i
                 ]},
                 // Troponin
                 { key: 'troponin', regexes: [
-                    /\bTroponin\s*T\b[:\s]+(\d+\.?\d*)/i,
-                    /\bTroponin\b[:\s]+(\d+\.?\d*)/i,
-                    /\bhs-Troponin\b[:\s]+(\d+\.?\d*)/i,
-                    /Troponin\s+([\d\.]+)/i
+                    /\bTroponin\s*T\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bTroponin\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bhs-Troponin\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Troponin\s+([\d\.,]+)/i,
+                    /\btroponin\b[:\s]+(\d+[\.,]?\d*)/i
                 ]},
                 // Pro-BNP
                 { key: 'bnp', regexes: [
-                    /\bPro-BNP\b[:\s]+(\d+\.?\d*)/i,
-                    /\bProBNP\b[:\s]+(\d+\.?\d*)/i,
-                    /\bNT-proBNP\b[:\s]+(\d+\.?\d*)/i,
-                    /Pro-BNP\s+([\d\.]+)/i
+                    /\bPro-BNP\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bProBNP\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bNT-proBNP\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /Pro-BNP\s+([\d\.,]+)/i,
+                    /\bpro-bnp\b[:\s]+(\d+[\.,]?\d*)/i,
+                    /\bbnp\b[:\s]+(\d+[\.,]?\d*)/i
                 ]}
             ];
             
@@ -1808,7 +1828,9 @@
                     for (const regex of pattern.regexes) {
                         const match = line.match(regex) || normalizedLine.match(regex);
                         if (match && match[1]) {
-                            const value = match[1].trim();
+                            let value = match[1].trim();
+                            // Turkce ondalik format (virgul) -> nokta cevir
+                            value = value.replace(',', '.');
                             // Değer geçerliyse kaydet (sayısal kontrol)
                             if (value && !isNaN(parseFloat(value))) {
                                 // Önceki değer yoksa veya yeni değer daha anlamlıysa güncelle
